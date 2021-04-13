@@ -4,13 +4,96 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.css">
+    <link rel="stylesheet" href="libs/css/styles.css">
     <title>Company Directory</title>
 
 </head>
 <body>
-  <h1>Company Directory</h1>
+  <header>
+    <div class="title">
+      <h1>Company Directory</h1>
+      <h5>Directing... Made Easy</h5>
+    </div>
+  </header>
+
+<section>
+  <div class="left-side-body">
+    <div class="left-side-items">
+    <div class="add-user-button">
+      <button class="button" onclick="addUser()">New Employee</button> 
+    </div>
+    <div>
+      <div class="database-manipulation">
+        <h4>Display</h4>
+          <div class="departments-div">
+            <h6>Departments</h6>
+          </div>
+        
+          <div class="location-div">
+            <h6>Location</h6>
+          </div>
+          <div class="order-by-div">
+            <h6>Order by</h6>
+              <select>
+                <option>Name</option>
+                <option>Department</option>
+                <option>Location</option>
+              </select>
+              <select>
+                <option>Asc</option>
+                <option>Desc</option>
+              </select>
+          </div>
+          <div>
+            <button class="button">Search</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="right-side-body">
+    <div class="right-side-top">
+      <h4>Employees</h4>
+      <input type="text" placeholder="Search">
+    </div>
+    <div class="table-container">
+    <div id="tableUsers">
+
+    </div>
+  </div>
+  </div>
+</section>
+
+
+
+<!-- 
+<h4>Add User</h4>
+<form>
+  <label for="firstName">First Name:</label>
+  <input type="text" id="firstName">
+  <br>
+  <label for="lastName">Last Name:</label>
+  <input type="text" id="lastName">
+  <br>
+  <label for="email">Email:</label>
+  <input type="text" id="email">  
+  <br>
+
+  <label for="department">Department:</label>
+  <input type="text" id="department">  
+  <br>
+  <button onclick="addUser()">Submit</button>
+
+</form>
+-->
+
+
+
+
+<!--
   <form>
     <h4>Insert Department</h4>
     <label for="name">Department Name</label>
@@ -38,28 +121,43 @@
 
 </div>
 </div>
-<h4>Add User</h4>
-<form>
-  <label for="firstName">First Name:</label>
-  <input type="text" id="firstName">
-  <br>
-  <label for="lastName">Last Name:</label>
-  <input type="text" id="lastName">
-  <br>
-  <label for="email">Email:</label>
-  <input type="text" id="email">  
-  <br>
+-->
 
-  <label for="department">Department:</label>
-  <input type="text" id="department">  
-  <br>
-  <button onclick="addUser()">Submit</button>
-
-</form>
-
-</br>
-  <div id="tableUsers">
-
+  <!-- Add User Modal -->
+  <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addUserModalLabel">Update</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+         <form>
+          <label for="firstName">First Name:</label>
+          <input type="text" id="firstName">
+          <br>
+          <label for="lastName">Last Name:</label>
+          <input type="text" id="lastName">
+          <br>
+          <label for="email">Email:</label>
+          <input type="text" id="email">  
+          <br>
+        
+          <label for="department">Department:</label>
+          <input type="text" id="department">  
+          <br>
+          
+        
+         </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" id="addUser" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
   </div>
 
 

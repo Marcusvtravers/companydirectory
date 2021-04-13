@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+
+html, body{
+    height: 100vh;
+    font-family: 'Cairo', sans-serif;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #C1C1C1;
+}
+
+header{
+    text-align: center;
+    background-color: #656565;
+    color: white;
+   display:flex;
+   justify-content: center;
+   align-items: center;
+   height: 90px;
+}
+
+.title{
+    text-transform: uppercase;
+    padding:0;
+    margin:10px;
+    
+}
+.title h1{
+    font-weight: bold;
+    margin:0;
+    padding:0
+}
+.title h5{
+    margin:0;
+    padding:0;
+}
+
+section{
+    display:flex;
+    justify-content: space-between;
+    margin: 4% auto 0 auto;
+   
+}
+
+.left-side-body{
+    margin: 0 auto;
+    width: 25%;
+   
+}
+
+.add-user-button{
+    display: flex;
+    justify-content: center;
+    background-color: white;
+    width: 50%;
+    margin-left: 25%;
+    border:none;
+}
+
+.button{
+    width: 100%;
+    background-color: white;
+    
+    height: 50px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.left-side-items{
+   
+    height: 300px;
+}
+
+.database-manipulation{
+    margin-top: 10px;
+    padding: 15px;
+    background-color: white;
+
+}
+
+.order-by-div{
+    display:flex;
+    justify-content: space-between; 
+}
+
+
+.right-side-body{
+    background-color: white;
+    padding: 30px;
+    width: 70%
+}
+
+.table-container{
+    border: 1px solid black;
+    height: 70vh;
+    overflow:scroll;
+}
+
+.right-side-top{
+    display:flex;
+    justify-content: space-between;
+    border:1px solid green;
+    padding: 10px;
+    margin: 10px;
+}
+
+.right-side-top h4{
+    font-weight: bold;
+}
+
+.right-side-top input{
+    width: 50%;
+}
+
+#table-users{
+    display:flex;
+}

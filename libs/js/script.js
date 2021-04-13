@@ -1,27 +1,28 @@
 
-
-$.ajax({
-    url:'libs/php/getAll.php',
-    dataType: 'JSON',
-    type: 'POST',
-    success: function(res){
-        console.log(res)
-        for (let i = 0; i < res.data.length; i++){
-            const department = res.data[i].department;
-            const email = res.data[i].email;
-            const firstName = res.data[i].firstName;
-            const lastName = res.data[i].lastName;
-            const location = res.data[i].location;
-            const id = res.data[i].id
-
-            const table = `<div id=${id}><p>${firstName} ${lastName}: ${department}, ${location}, ${email} <a class="btn btn-danger" onclick='deleteUser(${id})'>Delete</a> <a class="btn btn-warning" onclick='updateUser(${id})'>Update</a><div>`;
-            $('#tableUsers').append(table);
+function getUsers(){
+    $.ajax({
+        url:'libs/php/getAll.php',
+        dataType: 'JSON',
+        type: 'POST',
+        success: function(res){
+            console.log(res)
+            for (let i = 0; i < res.data.length; i++){
+                const department = res.data[i].department;
+                const email = res.data[i].email;
+                const firstName = res.data[i].firstName;
+                const lastName = res.data[i].lastName;
+                const location = res.data[i].location;
+                const id = res.data[i].id
+    
+                const table = `<div id=${id}><p>${firstName} ${lastName}: ${department}, ${location}, ${email} <a class="btn btn-danger" onclick='deleteUser(${id})'>Delete</a> <a class="btn btn-warning" onclick='updateUser(${id})'>Update</a><div>`;
+                $('#tableUsers').append(table);
+            }
+        },
+        error: function(err){
+            console.log(err);
         }
-    },
-    error: function(err){
-        console.log(err);
-    }
-})
+    })
+}
 
 
 function insertDepartment() {
@@ -105,13 +106,17 @@ function getPersonnel(e){
 }
 
 
-function addUser(){
-    let firstName = $('#firstName');
-    let lastName = $('#lastName');
-    let department = document.getElementById('department').value;
-    let dep = department.charAt(0).toUpperCase() + department.slice(1);
-    let email = $('#email');
 
+function addUser(){
+    $('#addUserModal').modal('show');
+    $('#addUser').on('click', function(){
+        let firstName = $('#firstName');
+        let lastName = $('#lastName');
+        let department = document.getElementById('department').value;
+        let dep = department.charAt(0).toUpperCase() + department.slice(1);
+        let email = $('#email');
+        console.log(dep)
+        $('#addUserModal').modal('hide');
     if (firstName.val() != '' && lastName.val() != '' && dep.value != '' && email.val() != ''){
     $.ajax({
         url: 'libs/php/addUser.php',
@@ -124,8 +129,10 @@ function addUser(){
             email: email.val(),
         },
         success: function(res){
+            $('#tableUsers').empty();
             console.log(res)
             console.log("Success")
+            getUsers();
         },
         error: function(err){
             console.log(err);
@@ -135,6 +142,7 @@ function addUser(){
 else {
     console.log('Please Enter the correct details.')
 }
+})
 }
 
 
@@ -215,3 +223,5 @@ function updateUser(id){
     })
     })
 }
+
+getUsers();
