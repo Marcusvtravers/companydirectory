@@ -13,9 +13,24 @@ function getUsers(){
                 const lastName = res.data[i].lastName;
                 const location = res.data[i].location;
                 const id = res.data[i].id
-    
-                const table = `<div id=${id}><p>${firstName} ${lastName}: ${department}, ${location}, ${email} <a class="btn btn-danger" onclick='deleteUser(${id})'>Delete</a> <a class="btn btn-warning" onclick='updateUser(${id})'>Update</a><div>`;
-                $('#tableUsers').append(table);
+                
+                const table = `<div class="tables">
+  <table>
+  <tr class="table-names"><td>${firstName} ${lastName}</td></tr>
+  
+  <tr><td>${department}</td></tr>
+  <tr><td>${location}</td></tr>
+  </table>
+  <div class="table-buttons">
+  <a  onclick="updateUser(${id})"  >Update</a>
+  <a onclick="deleteUser(${id})">Delete</a>
+ 
+  </div>
+ </div>`;
+
+
+                
+                $('.tableUsers').append(table);
             }
         },
         error: function(err){
@@ -23,6 +38,7 @@ function getUsers(){
         }
     })
 }
+
 
 
 function insertDepartment() {
@@ -105,8 +121,6 @@ function getPersonnel(e){
  })
 }
 
-
-
 function addUser(){
     $('#addUserModal').modal('show');
     $('#addUser').on('click', function(){
@@ -129,7 +143,7 @@ function addUser(){
             email: email.val(),
         },
         success: function(res){
-            $('#tableUsers').empty();
+            $('.tableUsers').empty();
             console.log(res)
             console.log("Success")
             getUsers();
@@ -156,7 +170,9 @@ function deleteUser(id){
         },
         success: function(res){
             //Maybe add a success message with user details
-            document.getElementById(id).style.display = "none";
+  
+            $('.tableUsers').empty();
+            getUsers();
         },
         error: function(err){
             console.log(err)
@@ -189,33 +205,14 @@ function updateUser(id){
         },
         success:function(res){
             $('#updateModal').modal('hide');
-            document.getElementById(id).style.display = "none";
+            console.log(id)
+            
             firstName.val() == '';
             lastName.val() == '';
             email.val() == ''
-
-            $.ajax({
-                url:'libs/php/getAll.php',
-                dataType: 'JSON',
-                type: 'POST',
-                success: function(res){
-                    
-                    $('#tableUsers').empty()
-                    for (let i = 0; i < res.data.length; i++){
-                        const department = res.data[i].department;
-                        const email = res.data[i].email;
-                        const firstName = res.data[i].firstName;
-                        const lastName = res.data[i].lastName;
-                        const location = res.data[i].location;
-                        const id = res.data[i].id
-                        const table = `<div id=${id}><p>${firstName} ${lastName}: ${department}, ${location}, ${email} <a class="btn btn-danger" onclick='deleteUser(${id})'>Delete</a> <a class="btn btn-warning" onclick='updateUser(${id})'>Update</a><div>`;
-                        $('#tableUsers').append(table);
-                    }
-                },
-                error: function(err){
-                    console.log(err);
-                }
-            })
+            $('.tableUsers').empty()
+            getUsers();
+   
         },
         error:function(err){
             console.log(err)
@@ -223,5 +220,41 @@ function updateUser(id){
     })
     })
 }
+
+$.ajax({
+    url: 'libs/php/departmentFill.php',
+    dataType: 'JSON',
+    type: 'POST',
+    success: function(res){
+        console.log(res)
+        for (let i = 0; i < res.data.length; i++){
+            let depName = res.data[i].name;
+            let table = `<input type="checkbox"><label for="${depName}"><span class="departmentfillitem">${depName}</span></label></br>`
+            $("#departments-fill").append(table);
+        }
+        
+    },
+    error:function(err){
+        console.log(err)
+    }
+})
+
+$.ajax({
+    url: 'libs/php/locationFill.php',
+    dataType: 'JSON',
+    type: 'POST',
+    success: function(res){
+        console.log(res)
+        for (let i = 0; i < res.data.length; i++){
+            let depName = res.data[i].name;
+            let table = `<input type="checkbox"><label for="${depName}"><span class="locationfillitem">${depName}</span></label></br>`
+            $("#location-fill").append(table);
+        }
+        
+    },
+    error:function(err){
+        console.log(err)
+    }
+})
 
 getUsers();

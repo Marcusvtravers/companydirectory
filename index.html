@@ -5,9 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.css">
+    <link rel="stylesheet" href="vendors/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="vendors/@fortawesome/fontawesome-free/css/all.css">
     <link rel="stylesheet" href="libs/css/styles.css">
+
     <title>Company Directory</title>
 
 </head>
@@ -30,10 +31,18 @@
         <h4>Display</h4>
           <div class="departments-div">
             <h6>Departments</h6>
+              <input type="checkbox"><label><span class="departmentfillitem">All</span></label></br>
+              <form id="departments-fill">
+              
+              </form>
           </div>
         
           <div class="location-div">
             <h6>Location</h6>
+            <input type="checkbox"><label><span class="locationfillitem">All</span></label></br>
+            <form id="location-fill">
+            
+            </form>
           </div>
           <div class="order-by-div">
             <h6>Order by</h6>
@@ -60,7 +69,7 @@
       <input type="text" placeholder="Search">
     </div>
     <div class="table-container">
-    <div id="tableUsers">
+    <div class="tableUsers">
 
     </div>
   </div>
@@ -196,7 +205,7 @@
   </div>
 </div>
 
-    <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>  
+    <script src="vendors/bootstrap/dist/js/bootstrap.js"></script>  
     <script
   src="https://code.jquery.com/jquery-3.6.0.min.js"
   integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="

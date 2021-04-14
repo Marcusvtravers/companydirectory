@@ -5,7 +5,7 @@ html, body{
     font-family: 'Cairo', sans-serif;
     width: 100%;
     box-sizing: border-box;
-    background-color: #C1C1C1;
+    background-color: #f5f5f5;
 }
 
 header{
@@ -77,9 +77,28 @@ section{
 
 }
 
+.departments-div{
+    margin:2px;
+}
+
+.departmentfillitem{
+    padding: 10px; 
+    font-size: 0.8em;  
+}
+
+.location-div{
+    margin: 2px;
+}
+
+.locationfillitem{
+        padding: 10px; 
+        font-size: 0.8em;
+}
+
 .order-by-div{
     display:flex;
     justify-content: space-between; 
+    margin:2px;
 }
 
 
@@ -111,6 +130,15 @@ section{
     width: 50%;
 }
 
-#table-users{
+.tableUsers{
     display:flex;
+    flex-wrap: wrap;
+   
+}
+.tables{
+    display:flex;
+    border: 1px solid black;
+    width: 50%;
+    background-color: #656565;
+    color:white;
 }

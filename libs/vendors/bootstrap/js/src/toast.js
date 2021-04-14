@@ -11,11 +11,11 @@ import {
   getTransitionDurationFromElement,
   reflow,
   typeCheckConfig
-} from './util/index'
-import Data from './dom/data'
-import EventHandler from './dom/event-handler'
-import Manipulator from './dom/manipulator'
-import BaseComponent from './base-component'
+} from 'bootstrap/js/src/util'
+import Data from 'bootstrap/js/src/dom/data'
+import EventHandler from 'bootstrap/js/src/dom/event-handler'
+import Manipulator from 'bootstrap/js/src/dom/manipulator'
+import BaseComponent from 'bootstrap/js/src/base-component'
 
 /**
  * ------------------------------------------------------------------------
