@@ -5,8 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="vendors/bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" href="vendors/@fortawesome/fontawesome-free/css/all.css">
+    <link rel="stylesheet" href="libs/vendors/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="libs/vendors/@fortawesome/fontawesome-free/css/all.css">
     <link rel="stylesheet" href="libs/css/styles.css">
 
     <title>Company Directory</title>
@@ -23,8 +23,18 @@
 <section>
   <div class="left-side-body">
     <div class="left-side-items">
-    <div class="add-user-button">
-      <button class="button" onclick="addUser()">New Employee</button> 
+      <div class="add-user-buttons">
+        <div class="left-side-btn">
+        <button id="new-employee-btn" onclick="addUser()">New Employee</button>
+      </div>
+      <div class="right-side-btn">
+        <button id="add-multiple-btn" ><i class="fas fa-angle-down"></i></button>
+          <div class="dropdown-add">
+            <a href="#" onclick="addUser()">Add Employee</a>
+            <a href="#" onclick="addDepartment()">Add Department</a>
+            <a href="#" onclick="addLocation()">Add Location</a>
+          </div>
+        </div>
     </div>
     <div>
       <div class="database-manipulation">
@@ -46,18 +56,18 @@
           </div>
           <div class="order-by-div">
             <h6>Order by</h6>
-              <select>
-                <option>Name</option>
-                <option>Department</option>
-                <option>Location</option>
+              <select id="order-by-select">
+                <option value="lastName">Name</option>
+                <option value="department">Department</option>
+                <option value="location">Location</option>
               </select>
-              <select>
-                <option>Asc</option>
-                <option>Desc</option>
+              <select id="order-by-direction">
+                <option value="ASC">Asc</option>
+                <option value="DESC">Desc</option>
               </select>
           </div>
           <div>
-            <button class="button">Search</button>
+            <button class="button" onclick='orderBy()'>Search</button>
           </div>
         </div>
       </div>
@@ -204,8 +214,61 @@
     </div>
   </div>
 </div>
+  <!-- Add Department Modal -->
+  <div class="modal fade" id="addDepartmentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addDepartmentModalLabel">Add Department</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+         <form>
+           <label for="addDepartmentNameModal">Department Name:</label>
+           <input type="text" id="addDepartmentNameModal">
+           <br>
+           <label for="addDepartmentLocationModal">Location Name:</label>
+           <input type="text" id="addDepartmentLocationModal">
+           
+         </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" id="addDepartment" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <script src="vendors/bootstrap/dist/js/bootstrap.js"></script>  
+    <!-- Add Location Modal -->
+    <div class="modal fade" id="addLocationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addLocationModalLabel">Add Location</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+           <form>
+             
+             <label for="addDepartmentLocationModal">Location Name:</label>
+             <input type="text" id="addLoca">
+             
+           </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" id="addLocation" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="libs/vendors/bootstrap/dist/js/bootstrap.js"></script>  
     <script
   src="https://code.jquery.com/jquery-3.6.0.min.js"
   integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
