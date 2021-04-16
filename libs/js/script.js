@@ -1,5 +1,6 @@
 
 function getUsers(){
+    $('.tableUsers').empty();
     $.ajax({
         url:'libs/php/getAll.php',
         dataType: 'JSON',
@@ -280,7 +281,7 @@ function updateUser(id){
     })
     })
 }
-
+/*
 function fillDepartment(){
 $.ajax({
     url: 'libs/php/departmentFill.php',
@@ -290,8 +291,21 @@ $.ajax({
         console.log(res)
         for (let i = 0; i < res.data.length; i++){
             let depName = res.data[i].name;
-            let table = `<input type="checkbox"><label for="${depName}"><span class="departmentfillitem">${depName}</span></label></br>`
+            let id = res.data[i].id;
+            let table = `<input type="radio" id="department${id}"><label for="${depName}"><span class="departmentfillitem">${depName}</span></label></br>`
             $("#departments-fill").append(table);
+
+            let va = document.getElementById(`department${id}`).id;
+                
+            $(`#department${id}`).on('click', function(){
+              console.log(`department${id}`)
+   
+               
+              
+              newDepartmentOrder(va)
+              
+           })
+
         }
         
     },
@@ -300,6 +314,169 @@ $.ajax({
     }
 })
 }
+
+function newDepartmentOrder(id){
+   
+    console.log(id)
+    $('.tableUsers').empty()
+    $.ajax({
+        url: 'libs/php/newOrderDepartment.php',
+        dataType: 'JSON',
+        type: 'POST',
+        data:{
+            id: id
+        },
+        success:function(res){
+            console.log(res)
+            for(let i = 0; i < res.data.length; i++){
+                let firstName = res.data[i].firstName;
+                let lastName = res.data[i].lastName;
+                let department = res.data[i].department;
+                let location = res.data[i].location;
+                let email = res.data[i].email;
+                let id = res.data[i].id;
+                const table = `<div class="tables">
+      <table>
+      <tr class="table-names"><td>${firstName} ${lastName}</td></tr>
+      
+      <tr><td>${department}</td></tr>
+      <tr><td>${location}</td></tr>
+      <tr><td>${email}</td></tr>
+      </table>
+      <div class="table-buttons">
+      <a  onclick="updateUser(${id})"  >Update</a>
+      <a onclick="deleteUser(${id})">Delete</a>
+     
+      </div>
+     </div>`;
+                
+                $('.tableUsers').append(table);
+            }
+        },
+        error:function(res){
+            console.log(res)
+        }   
+    })
+}
+
+
+*/
+
+
+function fillLeftHandSide(){
+
+
+    $.ajax({
+        url: 'libs/php/locationFill.php',
+        dataType: 'JSON',
+        type: 'POST',
+        success:function(res){
+            console.log(res);
+            var locationSelect = document.getElementById('location-fill')
+            for(let i = 0; i < res.data.length; i++){
+                let locName = res.data[i].name;
+                let id = res.data[i].id;
+                let el = document.createElement("option");
+                el.textContent = locName;
+                el.value = id;
+                locationSelect.appendChild(el);
+                locationSelect.value;
+            }
+            
+            $('#location-fill').change('click', function(){
+                console.log(locationSelect.value);
+            })
+            $.ajax({
+                url: 'libs/php/departmentFill.php',
+                dataType: 'JSON',
+                type: 'POST',
+                success:function(res){
+                    console.log(res)
+                    var departmentSelect = document.getElementById('department-fill');
+                    for(let i = 0; i < res.data.length; i++){
+                        let depName = res.data[i].name;
+                        let id = res.data[i].id;
+                        let el = document.createElement('option');
+                        el.textContent = depName;
+                        el.value = id;
+                        departmentSelect.appendChild(el);
+                    }
+
+                    $('#department-fill').change('click', function(){
+                        console.log(departmentSelect.value);
+                    })
+                    $('#orderBy').on('click', function(){
+                        let orderVal = document.querySelector('#order-by-select');
+                        let val = orderVal.value;
+                        let directionValue = document.querySelector('#order-by-direction');
+                        let dirVal = directionValue.value;
+                        $('.tableUsers').empty();
+                        console.log(val);
+                        $.ajax({
+                            url: 'libs/php/orderBy.php',
+                            dataType: 'JSON',
+                            type:'POST',
+                            data:{
+                                orderBySelect: val,
+                                directionValue: dirVal,
+                                locationId: locationSelect.value,
+                                departmentId: departmentSelect.value
+                            },
+                            success:function(res){
+                                
+                                console.log(res)
+                                for (let i = 0; i < res.data.length; i++){
+                                    const department = res.data[i].department;
+                                    const email = res.data[i].email;
+                                    const firstName = res.data[i].firstName;
+                                    const lastName = res.data[i].lastName;
+                                    const location = res.data[i].locationName;
+                                    const locationId = res.data[i].locationId;
+                                    const id = res.data[i].id
+                                    
+                                    const table = `<div class="tables">
+                      <table>
+                      <tr class="table-names"><td>${firstName} ${lastName}</td></tr>
+                      
+                      <tr><td>${department}</td></tr>
+                      <tr><td>${location}</td></tr>
+                      <tr><td>${email}</td></tr>
+                      </table>
+                      <div class="table-buttons">
+                      <a  onclick="updateUser(${id})"  >Update</a>
+                      <a onclick="deleteUser(${id})">Delete</a>
+                     
+                      </div>
+                     </div>`;
+                    
+                    
+                                    
+                                    $('.tableUsers').append(table);
+                                }
+                            },
+                            error: function(err){
+                                console.log(err);
+                            }
+                    
+                        })
+                    })
+                
+                },
+                error:function(err){
+                    console.log(err);
+                }
+            })
+           
+        },
+        error:function(err){
+            console.log(err);
+        }
+    })
+}
+
+getUsers();
+fillLeftHandSide();
+/*
 
 function fillLocation(){
 
@@ -313,22 +490,76 @@ function fillLocation(){
             for (let i = 0; i < res.data.length; i++){
                 let depName = res.data[i].name;
                 let id = res.data[i].id;
+                
                 console.log(id)
-                let depName2 = depName.replace(' ', '');
-                let table = `<input value='${depName}' id="${id}" type="checkbox"><label for="${depName}"><span class="locationfillitem">${depName}</span></label></br>`
+                
+                let table = `<input value='${depName}' class="check" id="${id}" type="radio"><label for="${depName}"><span class="locationfillitem">${depName}</span></label></br>`
                 $("#location-fill").append(table);
                 console.log(document.getElementById(`${id}`))
-                let va = document.getElementById(`${id}`).value;
+                let va = document.getElementById(`${id}`).id;
+                
                  $(`#${id}`).on('click', function(){
-                   console.log(va)
+                   console.log(`${id}`)
+        
+                    
+                   
+                   newLocationOrder(va)
+                   
                 })
-
+                
+             
             }
-            
+        
         },
         error:function(err){
             console.log(err)
         }
+    })
+}
+
+
+
+function newLocationOrder(id){
+   
+    console.log(id)
+    $('.tableUsers').empty()
+    $.ajax({
+        url: 'libs/php/newOrderLocation.php',
+        dataType: 'JSON',
+        type: 'POST',
+        data:{
+            id: id
+        },
+        success:function(res){
+            console.log(res)
+            for(let i = 0; i < res.data.length; i++){
+                let firstName = res.data[i].firstName;
+                let lastName = res.data[i].lastName;
+                let department = res.data[i].department;
+                let location = res.data[i].location;
+                let email = res.data[i].email;
+                let id = res.data[i].id;
+                const table = `<div class="tables">
+      <table>
+      <tr class="table-names"><td>${firstName} ${lastName}</td></tr>
+      
+      <tr><td>${department}</td></tr>
+      <tr><td>${location}</td></tr>
+      <tr><td>${email}</td></tr>
+      </table>
+      <div class="table-buttons">
+      <a  onclick="updateUser(${id})"  >Update</a>
+      <a onclick="deleteUser(${id})">Delete</a>
+     
+      </div>
+     </div>`;
+                
+                $('.tableUsers').append(table);
+            }
+        },
+        error:function(res){
+            console.log(res)
+        }   
     })
 }
 
@@ -343,7 +574,7 @@ function orderBy(){
     
 
 
-        console.log('Working')
+ 
         $.ajax({
             url: 'libs/php/orderBy.php',
             dataType: 'JSON',
@@ -360,6 +591,7 @@ function orderBy(){
                     const firstName = res.data[i].firstName;
                     const lastName = res.data[i].lastName;
                     const location = res.data[i].location;
+                    const locationId = res.data[i].locationId;
                     const id = res.data[i].id
                     
                     const table = `<div class="tables">
@@ -388,6 +620,14 @@ function orderBy(){
         })
 }
 
-getUsers();
+
+*/
+
+
+
+
+
+/*
 fillDepartment();
 fillLocation();
+*/

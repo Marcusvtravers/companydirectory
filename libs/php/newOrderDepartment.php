@@ -32,7 +32,15 @@
 
 	}	
 
-	$query = 'SELECT * FROM department';
+$id = $_POST['id'];
+$new = trim($id, 'abcdefghijklmnopqrstuvwxyz');
+/*
+$dep = $_POST['dep'];
+$loc = $_POST['loc'];
+*/
+
+	 $query = "SELECT personnel.id, personnel.lastName, personnel.firstName, personnel.email,  d.name AS department, l.name AS location FROM personnel LEFT JOIN department d ON d.id = personnel.departmentID  LEFT JOIN location l ON l.id = d.locationID WHERE d.id='$new'";
+
 
 	$result = $conn->query($query);
 	
@@ -58,6 +66,7 @@
 		array_push($data, $row);
 
 	}
+
 
 	$output['status']['code'] = "200";
 	$output['status']['name'] = "ok";

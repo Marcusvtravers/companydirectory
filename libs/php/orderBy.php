@@ -32,15 +32,31 @@
 
 	}	
 
-$val = $_POST['val'];
-$direction = $_POST['order'];
-/*
-$dep = $_POST['dep'];
-$loc = $_POST['loc'];
-*/
+	
+$depId = $_POST['departmentId'];
+$locId = $_POST['locationId'];
+$orderBy = $_POST['orderBySelect'];
+$direction = $_POST['directionValue'];
 
-	// $query = "SELECT personnel.id, personnel.lastName, personnel.firstName, personnel.email,  d.name AS department, l.name AS location FROM personnel LEFT JOIN department d ON d.id = personnel.departmentID  LEFT JOIN location l ON l.id = d.locationID WHERE l.name='Munich' AND d.name='Training' ORDER BY $val $direction, personnel.lastName";
-	$query = "SELECT personnel.id, personnel.lastName, personnel.firstName, personnel.email,  d.name AS department, l.name AS location FROM personnel LEFT JOIN department d ON d.id = personnel.departmentID  LEFT JOIN location l ON l.id = d.locationID ORDER BY $val $direction, personnel.lastName";
+if ($depId === ''){
+	$depId = null;
+}
+if ($locId === ''){	
+	$locId = null;
+}
+
+if (isset($depId) && isset($locId)){
+ $query = "SELECT personnel.id, personnel.lastName, personnel.firstName, personnel.email,  d.name AS department, l.name AS locationName, l.id AS locationId FROM personnel  LEFT JOIN department d ON d.id = personnel.departmentID  LEFT JOIN location l ON l.id = d.locationID WHERE  l.id = '$locId' AND d.id = '$depId' ORDER BY $orderBy $direction, personnel.lastName"; 
+} elseif(isset($depId) && !isset($locId)){
+	$query = "SELECT personnel.id, personnel.lastName, personnel.firstName, personnel.email,  d.name AS department, l.name AS locationName, l.id AS locationId FROM personnel  LEFT JOIN department d ON d.id = personnel.departmentID  LEFT JOIN location l ON l.id = d.locationID WHERE d.id = '$depId' ORDER BY $orderBy $direction, personnel.lastName";
+} elseif (!isset($depId) && isset($locId)){
+	$query = "SELECT personnel.id, personnel.lastName, personnel.firstName, personnel.email,  d.name AS department, l.name AS locationName, l.id AS locationId FROM personnel  LEFT JOIN department d ON d.id = personnel.departmentID  LEFT JOIN location l ON l.id = d.locationID WHERE l.id = '$locId' ORDER BY $orderBy $direction, personnel.lastName";
+} else{
+	$query = "SELECT personnel.id, personnel.lastName, personnel.firstName, personnel.email,  d.name AS department, l.name AS locationName, l.id AS locationId FROM personnel  LEFT JOIN department d ON d.id = personnel.departmentID  LEFT JOIN location l ON l.id = d.locationID ORDER BY $orderBy $direction, personnel.lastName";
+}
+
+
+
 
 	$result = $conn->query($query);
 	
