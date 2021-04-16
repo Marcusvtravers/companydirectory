@@ -76,6 +76,19 @@ section{
 
 
 
+.departments-header{
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 5px 7px;
+}
+
+.departments-crud a{
+    text-decoration: none;
+    padding: 3px;
+}
+
 .dropdown-add{
     display:none;  
     position: absolute;

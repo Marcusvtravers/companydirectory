@@ -43,86 +43,6 @@ function getUsers(){
 
 
 
-function insertDepartment() {
-   
-    let depName = $('#depName');
-    let location = $('#location');
-
-    $.ajax({
-       url: 'libs/php/insertDepartment.php',
-       dataType: 'text',
-       type: 'POST',
-       data:{
-           name: depName.val(),
-           locationID: location.val()
-       },
-    
-    success: function(res){
-        console.log('You have successfully added a department.')
-    }
-})
-}
-
-function getPersonnel(e){
-    e.preventDefault();
-    let employeeId = $('#employeeId');
-    $('#tableUsers').empty();
-   
-    $.ajax({
-        url: 'libs/php/getPersonnel.php',
-        dataType: 'JSON',
-        type: 'POST',
-        data:{
-            id: employeeId.val()
-        },    
-     success: function(res){
-
-         console.log(res)
-         const firstName = res.data.personnel[0].firstName;
-         const lastName = res.data.personnel[0].lastName;
-         const email = res.data.personnel[0].email;
-     
-
-         let info = `The user you are looking for is ${firstName} ${lastName} ${email}, <span id="department"></span> , `
-         $('#tableUsers').append(info)
-      
-         const depId = res.data.personnel[0].departmentID;
-         console.log(depId)
-         for (let i = 0; i < res.data.department.length; i++){
-            if (depId === res.data.department[i].id){
-                console.log(res.data.department[i]);
-                let department = res.data.department[i].name;
-                let departmentId = res.data.department[i].id;
-                $('#department').append(department);
-
-                $.ajax({
-                    url: 'libs/php/getLocation.php',
-                    dataType: 'JSON',
-                    type: 'POST',
-                   
-                    success: function(u){
-                        console.log(u)
-                        
-                        for (let j = 0; j < u.data.length; j++){
-                            let locid = u.data[j].id
-                            if (departmentId === locid){
-                                console.log(u.data[j])
-                                let location = u.data[j].name
-                                console.log(location)
-                                $('#tableUsers').append(location);
-                                
-                            }
-                        }
-                        
-                    }
-                })
-            } 
-
-         }
-     }
- })
-}
-
 function addUser(){
     $('#addUserModal').modal('show');
     $('#addUser').on('click', function(){
@@ -149,6 +69,7 @@ function addUser(){
             console.log(res)
             console.log("Success")
             getUsers();
+        
         },
         error: function(err){
             console.log(err);
@@ -184,7 +105,7 @@ function addDepartment(){
                 console.log(res)
                 $('#addDepartmentModal').modal('hide');
                 $("#departments-fill").empty();
-                fillDepartment();
+                departmentFill();
             },
             error:function(err){
                 console.log(err)
@@ -194,8 +115,7 @@ function addDepartment(){
 }
 
 function addLocation(){
-    $('#addLocationModal').modal('show');
-    
+    $('#addLocationModal').modal('show');  
     $('#addLocation').on('click', function(){
         let locationName = document.getElementById('addLoca');
        console.log(locationName.value)
@@ -210,7 +130,7 @@ function addLocation(){
                 $('#addLocationModal').modal('hide');
                 locationName.value == '';
                 $("#location-fill").empty();
-                fillLocation();
+                locationFill();
                 console.log(res)
             },
             error:function(err){
@@ -219,7 +139,6 @@ function addLocation(){
         })
     })
 }
-
 
 function deleteUser(id){
 
@@ -241,7 +160,6 @@ function deleteUser(id){
         }
     })
 }
-
 
 
 function updateUser(id){
@@ -281,97 +199,17 @@ function updateUser(id){
     })
     })
 }
-/*
-function fillDepartment(){
-$.ajax({
-    url: 'libs/php/departmentFill.php',
-    dataType: 'JSON',
-    type: 'POST',
-    success: function(res){
-        console.log(res)
-        for (let i = 0; i < res.data.length; i++){
-            let depName = res.data[i].name;
-            let id = res.data[i].id;
-            let table = `<input type="radio" id="department${id}"><label for="${depName}"><span class="departmentfillitem">${depName}</span></label></br>`
-            $("#departments-fill").append(table);
 
-            let va = document.getElementById(`department${id}`).id;
-                
-            $(`#department${id}`).on('click', function(){
-              console.log(`department${id}`)
-   
-               
-              
-              newDepartmentOrder(va)
-              
-           })
-
-        }
-        
-    },
-    error:function(err){
-        console.log(err)
-    }
-})
-}
-
-function newDepartmentOrder(id){
-   
-    console.log(id)
-    $('.tableUsers').empty()
-    $.ajax({
-        url: 'libs/php/newOrderDepartment.php',
-        dataType: 'JSON',
-        type: 'POST',
-        data:{
-            id: id
-        },
-        success:function(res){
-            console.log(res)
-            for(let i = 0; i < res.data.length; i++){
-                let firstName = res.data[i].firstName;
-                let lastName = res.data[i].lastName;
-                let department = res.data[i].department;
-                let location = res.data[i].location;
-                let email = res.data[i].email;
-                let id = res.data[i].id;
-                const table = `<div class="tables">
-      <table>
-      <tr class="table-names"><td>${firstName} ${lastName}</td></tr>
-      
-      <tr><td>${department}</td></tr>
-      <tr><td>${location}</td></tr>
-      <tr><td>${email}</td></tr>
-      </table>
-      <div class="table-buttons">
-      <a  onclick="updateUser(${id})"  >Update</a>
-      <a onclick="deleteUser(${id})">Delete</a>
-     
-      </div>
-     </div>`;
-                
-                $('.tableUsers').append(table);
-            }
-        },
-        error:function(res){
-            console.log(res)
-        }   
-    })
-}
-
-
-*/
 
 
 function fillLeftHandSide(){
-
-
     $.ajax({
         url: 'libs/php/locationFill.php',
         dataType: 'JSON',
         type: 'POST',
         success:function(res){
             console.log(res);
+           
             var locationSelect = document.getElementById('location-fill')
             for(let i = 0; i < res.data.length; i++){
                 let locName = res.data[i].name;
@@ -392,6 +230,7 @@ function fillLeftHandSide(){
                 type: 'POST',
                 success:function(res){
                     console.log(res)
+                   
                     var departmentSelect = document.getElementById('department-fill');
                     for(let i = 0; i < res.data.length; i++){
                         let depName = res.data[i].name;
@@ -474,42 +313,187 @@ function fillLeftHandSide(){
     })
 }
 
-getUsers();
-fillLeftHandSide();
-/*
+function departmentFill(){
+    $.ajax({
+        url: 'libs/php/departmentFill.php',
+        dataType: 'JSON',
+        type: 'POST',
+        success:function(res){
+            console.log(res)
+            $('#department-fill').empty();
+            var departmentSelect = document.getElementById('department-fill');
+            for(let i = 0; i < res.data.length; i++){
+                let depName = res.data[i].name;
+                let id = res.data[i].id;
+                let el = document.createElement('option');
+                el.textContent = depName;
+                el.value = id;
+                departmentSelect.appendChild(el);
+            }
+        },
+            error:function(err){
+                console.log(err);
+            }  
+})
+}
 
-function fillLocation(){
-
+function locationFill(){
     $.ajax({
         url: 'libs/php/locationFill.php',
         dataType: 'JSON',
         type: 'POST',
-        success: function(res){
+        success:function(res){
             console.log(res)
-            
-            for (let i = 0; i < res.data.length; i++){
+            $('#location-fill').empty();
+            var departmentSelect = document.getElementById('location-fill');
+            for(let i = 0; i < res.data.length; i++){
                 let depName = res.data[i].name;
                 let id = res.data[i].id;
-                
-                console.log(id)
-                
-                let table = `<input value='${depName}' class="check" id="${id}" type="radio"><label for="${depName}"><span class="locationfillitem">${depName}</span></label></br>`
-                $("#location-fill").append(table);
-                console.log(document.getElementById(`${id}`))
-                let va = document.getElementById(`${id}`).id;
-                
-                 $(`#${id}`).on('click', function(){
-                   console.log(`${id}`)
-        
-                    
-                   
-                   newLocationOrder(va)
-                   
-                })
-                
-             
+                let el = document.createElement('option');
+                el.textContent = depName;
+                el.value = id;
+                departmentSelect.appendChild(el);
             }
-        
+        },
+            error:function(err){
+                console.log(err);
+            }  
+})
+}
+
+
+
+
+
+function editDepartment(){  
+    $('#editDepartmentModal').modal('show');
+    $.ajax({
+        url: 'libs/php/departmentFill.php',
+        dataType: 'JSON',
+        type: 'POST',
+        success:function(res){
+            console.log(res)
+            var departmentSelect = document.getElementById('department-fill-for-edit');
+            for(let i = 0; i < res.data.length; i++){
+                let depName = res.data[i].name;
+                let id = res.data[i].id;
+                let el = document.createElement('option');
+                el.textContent = depName;
+                el.value = id;
+                departmentSelect.appendChild(el);
+            }
+            $('#editDepartmentConfirm').on('click', function(){
+                
+                const newDep = document.getElementById('editDepartmentName');
+                console.log(newDep);
+                $('#editDepartmentModal').modal('hide');
+                $.ajax({
+                    url: 'libs/php/editDepartment.php',
+                    dataType: 'JSON',
+                    type: 'POST',
+                    data:{
+                        id: departmentSelect.value,
+                        newDep: newDep.value
+                    },
+                    success:function(res){
+                        departmentSelect.innerHTML="";
+                        departmentFill();
+                },
+                    error:function(err){
+                        console.log(err);
+                    }
+                
+                }) 
+            
+            })
+            
+
+            }
+            })
+}
+
+function deleteDepartment(){
+    $('#deleteDepartmentModal').modal('show');
+    $.ajax({
+        url:'libs/php/departmentFill.php',
+        dataType: 'JSON',
+        type: 'POST',
+        success:function(res){
+            var departmentSelect = document.getElementById('department-fill-for-delete');
+            for(let i = 0; i < res.data.length; i++){
+                let depName = res.data[i].name;
+                let id = res.data[i].id;
+                let el = document.createElement('option');
+                el.textContent = depName;
+                el.value = id;
+                departmentSelect.appendChild(el);
+            }
+            console.log(res)
+            $('#deleteDepartmentConfirm').on('click', function(){
+                $.ajax({
+                    url: 'libs/php/deleteDepartment.php',
+                    dataType: 'JSON',
+                    'type': 'POST',
+                    data:{
+                        id: departmentSelect.value
+                    },
+                    success:function(res){
+                        console.log(res);
+                        $('#deleteDepartmentModal').modal('hide');
+                        departmentFill();
+                    },
+                    error:function(err){
+                        console.log(err);
+                    }
+                })
+            })
+           
+        },
+        error:function(err){
+            console.log(err);
+        }
+    })
+}
+
+function editLocation(){
+    $('#editLocationModal').modal('show');
+    $.ajax({
+        url: 'libs/php/locationFill.php',
+        dataType: 'JSON',
+        type: 'POST',
+        success:function(res){
+            console.log(res)
+            var locationSelect = document.getElementById('location-fill-for-edit');
+            for(let i = 0; i < res.data.length; i++){
+                let locName = res.data[i].name;
+                let id = res.data[i].id;
+                let el = document.createElement('option');
+                el.textContent = locName;
+                el.value = id;
+                locationSelect.appendChild(el);
+            }
+            $('#editLocationConfirm').on('click', function(){
+                let editLoc = document.getElementById('editLocationName');
+                console.log('Working')
+                $.ajax({
+                    url: 'libs/php/editLocation.php',
+                    dataType: 'JSON',
+                    type: 'POST',
+                    data: {
+                        newLoc: editLoc.value,
+                        id: locationSelect.value
+                    },
+                    success:function(res){
+                        console.log(res);
+                        $('#editLocationModal').modal('hide');
+                        locationSelect.innerHTML="";
+                        locationFill();
+                    },
+                    error:function(err){
+                        console.log(err);
+                    }
+                })
+            })
         },
         error:function(err){
             console.log(err)
@@ -517,117 +501,48 @@ function fillLocation(){
     })
 }
 
-
-
-function newLocationOrder(id){
-   
-    console.log(id)
-    $('.tableUsers').empty()
+function deleteLocation(){
+    $('#deleteLocationModal').modal('show');
     $.ajax({
-        url: 'libs/php/newOrderLocation.php',
+        url: 'libs/php/locationFill.php',
         dataType: 'JSON',
         type: 'POST',
-        data:{
-            id: id
-        },
         success:function(res){
-            console.log(res)
+            console.log(res);
+            let locationSelect = document.getElementById('location-fill-for-delete');
             for(let i = 0; i < res.data.length; i++){
-                let firstName = res.data[i].firstName;
-                let lastName = res.data[i].lastName;
-                let department = res.data[i].department;
-                let location = res.data[i].location;
-                let email = res.data[i].email;
+                let locName = res.data[i].name;
                 let id = res.data[i].id;
-                const table = `<div class="tables">
-      <table>
-      <tr class="table-names"><td>${firstName} ${lastName}</td></tr>
-      
-      <tr><td>${department}</td></tr>
-      <tr><td>${location}</td></tr>
-      <tr><td>${email}</td></tr>
-      </table>
-      <div class="table-buttons">
-      <a  onclick="updateUser(${id})"  >Update</a>
-      <a onclick="deleteUser(${id})">Delete</a>
-     
-      </div>
-     </div>`;
-                
-                $('.tableUsers').append(table);
+                let el = document.createElement('option');
+                el.textContent = locName;
+                el.value = id;
+                locationSelect.appendChild(el);
             }
-        },
+            $('#deleteLocationConfirm').on('click', function(){
+                $.ajax({
+                    url: 'libs/php/deleteLocation.php',
+                    dataType: 'JSON',
+                    type: 'POST',
+                    data:{
+                        id: locationSelect.value
+                    },
+                    success:function(res){
+                        console.log(res);
+                        $('#deleteLocationModal').modal('hide');
+                        locationFill();
+                    },
+                    error:function(err){
+                        console.log(err);
+                    }
+                })
+            })
+        }, 
         error:function(res){
-            console.log(res)
-        }   
+            console.log(res);
+        }
     })
 }
 
 
-
-function orderBy(){
-    $('.tableUsers').empty();
-    let orderVal = document.querySelector('#order-by-select');
-    let val = orderVal.value;
-    let directionValue = document.querySelector('#order-by-direction');
-    let dirVal = directionValue.value;
-    
-
-
- 
-        $.ajax({
-            url: 'libs/php/orderBy.php',
-            dataType: 'JSON',
-            type: 'POST',
-            data: {
-                val: val,
-                order: dirVal
-            },
-            success: function(res){
-                console.log(res)
-                for (let i = 0; i < res.data.length; i++){
-                    const department = res.data[i].department;
-                    const email = res.data[i].email;
-                    const firstName = res.data[i].firstName;
-                    const lastName = res.data[i].lastName;
-                    const location = res.data[i].location;
-                    const locationId = res.data[i].locationId;
-                    const id = res.data[i].id
-                    
-                    const table = `<div class="tables">
-      <table>
-      <tr class="table-names"><td>${firstName} ${lastName}</td></tr>
-      
-      <tr><td>${department}</td></tr>
-      <tr><td>${location}</td></tr>
-      <tr><td>${email}</td></tr>
-      </table>
-      <div class="table-buttons">
-      <a  onclick="updateUser(${id})"  >Update</a>
-      <a onclick="deleteUser(${id})">Delete</a>
-     
-      </div>
-     </div>`;
-    
-    
-                    
-                    $('.tableUsers').append(table);
-                }
-            },
-            error: function(err){
-                console.log(err)
-            }
-        })
-}
-
-
-*/
-
-
-
-
-
-/*
-fillDepartment();
-fillLocation();
-*/
+getUsers();
+fillLeftHandSide();

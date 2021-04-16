@@ -40,7 +40,15 @@
       <div class="database-manipulation">
         <h4>Display</h4>
           <div class="departments-div">
-            <h6>Departments</h6>
+            <div class="departments-header">
+              <div class="departments-title">
+                <span>Departments</span>
+              </div>
+            <div class="departments-crud">
+              <a href="#" onclick="editDepartment()">Edit</a>
+              <a href="#" onclick="deleteDepartment()">Delete</a>
+            </div>
+          </div>
             <!--
               <input type="checkbox"><label><span class="departmentfillitem">All</span></label></br>
               <form id="departments-fill">
@@ -52,13 +60,16 @@
           </div>
         
           <div class="location-div">
-            <h6>Location</h6>
-            <!--
-            <input type="radio" onclick="getUsers()"><label><span class="locationfillitem">All</span></label></br>
-            <form id="location-fill">
-            
-            </form>
-            -->
+            <div class="departments-header">
+              <div class="departments-title">
+                <span>Location</span>
+              </div>
+            <div class="departments-crud">
+              <a href="#" onclick="editLocation()">Edit</a>
+              <a href="#" onclick="deleteLocation()">Delete</a>
+            </div>
+          </div>
+          
             <select id="location-fill">
               <option value="">All</option>
             </select>
@@ -278,6 +289,118 @@
       </div>
     </div>
 
+
+    <!-- Edit Department Modal -->
+    <div class="modal fade" id="editDepartmentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editDepartmentModalLabel">Edit Department</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+           <form>
+            <label for="editDepartmentLocationModal">Department Name:</label>
+            <select id="department-fill-for-edit">
+             
+            </select> 
+
+             <label for="editDepartmentLocationModal">New Department Name:</label>
+             <input type="text" id="editDepartmentName">
+             
+           </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" id="editDepartmentConfirm" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+      <!-- Delete Department Modal -->
+      <div class="modal fade" id="deleteDepartmentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="deleteDepartmentModalLabel">Edit Department</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+             <form>
+              <label for="deleteDepartmentLocationModal">Department Name:</label>
+              <select id="department-fill-for-delete">
+               
+              </select> 
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" id="deleteDepartmentConfirm" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+          <!-- Edit Location Modal -->
+    <div class="modal fade" id="editLocationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editLocationModalLabel">Edit Department</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+           <form>
+            <label for="editLocationNameModal">Location Name:</label>
+            <select id="location-fill-for-edit">
+             
+            </select> 
+          </br>
+             <label for="editLocationNameModal">New Location Name:</label>
+             <input type="text" id="editLocationName">
+             
+           </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" id="editLocationConfirm" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+        <!-- Delete Location Modal -->
+        <div class="modal fade" id="deleteLocationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="deleteLocationModalLabel">Edit Department</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+               <form>
+                <label for="deleteLocationLocationModal">Department Name:</label>
+                <select id="location-fill-for-delete">
+                 
+                </select> 
+  
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="deleteLocationConfirm" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
     <script
   src="https://code.jquery.com/jquery-3.6.0.min.js"
