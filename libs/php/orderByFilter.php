@@ -57,6 +57,8 @@ if (isset($depId) && isset($locId)){
 }
 
 
+
+
 	$result = $conn->query($query);
 	
 	if (!$result) {

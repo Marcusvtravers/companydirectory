@@ -32,9 +32,11 @@
 
 	}	
 
+$locationId = $_POST['id'];
 
 
-	$query = "SELECT * FROM department";
+	$query = "SELECT * FROM location WHERE id = '$locationId'";
+
 
 
 

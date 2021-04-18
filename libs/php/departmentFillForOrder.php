@@ -32,9 +32,17 @@
 
 	}	
 
-
-
+$locationId = $_POST['locationId'];
+if ($locationId == ""){
+	$locationId = null;
+}
+if (isset($locationId)){
+	$query = "SELECT * FROM department WHERE locationID = '$locationId'";
+} else {
 	$query = "SELECT * FROM department";
+}
+
+
 
 
 

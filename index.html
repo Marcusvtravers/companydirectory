@@ -39,6 +39,23 @@
     <div>
       <div class="database-manipulation">
         <h4>Display</h4>
+        <div class="location-div">
+          <div class="departments-header">
+            <div class="departments-title">
+              <span>Location</span>
+            </div>
+          <div class="departments-crud">
+            <a href="#" onclick="editLocation()">Edit</a>
+            <a href="#" onclick="deleteLocation()">Delete</a>
+          </div>
+        </div>
+        
+          <select id="location-fill">
+            <option value="">All</option>
+          </select>
+
+        </div>
+
           <div class="departments-div">
             <div class="departments-header">
               <div class="departments-title">
@@ -53,28 +70,16 @@
               <input type="checkbox"><label><span class="departmentfillitem">All</span></label></br>
               <form id="departments-fill">
               -->
+              <select id="department-first">
+                <option value="">All</option>
+              </select>
               <select id="department-fill">
                 <option value="">All</option>
               </select>
               </form>
           </div>
         
-          <div class="location-div">
-            <div class="departments-header">
-              <div class="departments-title">
-                <span>Location</span>
-              </div>
-            <div class="departments-crud">
-              <a href="#" onclick="editLocation()">Edit</a>
-              <a href="#" onclick="deleteLocation()">Delete</a>
-            </div>
-          </div>
-          
-            <select id="location-fill">
-              <option value="">All</option>
-            </select>
 
-          </div>
           <div class="order-by-div">
             <h6>Order by</h6>
               <select id="order-by-select">
@@ -325,7 +330,7 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="deleteDepartmentModalLabel">Edit Department</h5>
+              <h5 class="modal-title" id="deleteDepartmentModalLabel">Delete Department</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -351,7 +356,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="editLocationModalLabel">Edit Department</h5>
+            <h5 class="modal-title" id="editLocationModalLabel">Edit Location</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -381,7 +386,7 @@
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="deleteLocationModalLabel">Edit Department</h5>
+                <h5 class="modal-title" id="deleteLocationModalLabel">Delete Location</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>

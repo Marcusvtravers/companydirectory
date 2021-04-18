@@ -31,12 +31,9 @@
 		exit;
 
 	}	
+$id = $_POST['id'];
 
-
-
-	$query = "SELECT * FROM department";
-
-
+	$query = "SELECT * FROM location WHERE id = '1'";
 
 	$result = $conn->query($query);
 	
@@ -62,6 +59,7 @@
 		array_push($data, $row);
 
 	}
+    
 
 	$output['status']['code'] = "200";
 	$output['status']['name'] = "ok";
