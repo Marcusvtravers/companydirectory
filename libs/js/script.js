@@ -220,6 +220,8 @@ $.ajax({
     success:function(res){
         document.getElementById('department-first').style.display = 'block';
         document.getElementById('department-fill').style.display = 'none';
+        document.getElementById('defaultSearch').style.display = 'block';
+        document.getElementById('orderBy').style.display = 'none';
         let newVal = '<option value="">All</option>';
         $('#department-first').html(newVal);
         var departmentSelect = document.getElementById('department-first');
@@ -237,6 +239,8 @@ $.ajax({
             let direction = document.getElementById('order-by-direction');
             $('#department-first').change(function(){
                 $(this).off('change');
+                document.getElementById('defaultSearch').style.display = 'none';
+                document.getElementById('orderBy').style.display = 'block';
                 $('#orderBy').on('click', function(){
                   
                 searchDisplay(departmentSelect.value,"", orderBy.value, direction.value)
@@ -252,6 +256,15 @@ $.ajax({
 })
 }
 
+function justOrderBy(){
+    let order = document.getElementById('order-by-select').value;
+    let direction = document.getElementById('order-by-direction').value;
+    let locId = '';
+    let depId = '';
+    searchDisplay(locId, depId, order, direction)
+    
+}
+
 
 
 function locationFill(){
@@ -261,7 +274,8 @@ function locationFill(){
         type: 'POST',
         success:function(res){
           
-
+            document.getElementById('defaultSearch').style.display = 'block';
+            document.getElementById('orderBy').style.display = 'none';
             
             let newVal = '<option value="">All</option>';
             $('#location-fill').html(newVal);
@@ -279,6 +293,8 @@ function locationFill(){
 
             $('#location-fill').change(function(){
                 $(this).off('change');
+                document.getElementById('defaultSearch').style.display = 'none';
+                document.getElementById('orderBy').style.display = 'block';
                 departmentForOrder(locationSelect.value)
             })
             
