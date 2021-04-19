@@ -36,7 +36,7 @@ $email = $_POST['email'];
 $department = $_POST['department'];
 
 
-$sqldep = "SELECT * from department WHERE name = '$department'";
+$sqldep = "SELECT * from department WHERE id = '$department'";
 $result2 = $conn->query($sqldep);
 
 $arr=[];
@@ -46,7 +46,6 @@ while ($row = mysqli_fetch_assoc($result2)){
 
 
 $var = $arr[0]['id'];
-
 echo json_encode($arr);
 
 $sql = "INSERT INTO personnel (firstName, lastName, email, departmentID) VALUES ('$firstName', '$lastName', '$email', '$var')";

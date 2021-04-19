@@ -37,7 +37,7 @@ $dep = $_POST['depName'];
 
 
 
-$sqldep = "SELECT * FROM location WHERE name = '$loc'";
+$sqldep = "SELECT * FROM location WHERE id = '$loc'";
 $result = $conn->query($sqldep);
 
 
