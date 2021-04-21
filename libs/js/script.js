@@ -806,33 +806,57 @@ function deleteDepartment(){
                             document.getElementById('deleteDepartmentConfirm').style.display = 'block'
 
                         $('#deleteDepartmentConfirm').on('click', function(){
-                            
                             $.ajax({
-                                url: 'libs/php/deleteDepartment.php',
-                                dataType: 'JSON',
-                                'type': 'POST',
-                                data:{
-                                    id: departmentSelect.value
-                                },
-                                success:function(res){
-                                    console.log(res);
-
-                                    while(departmentSelect.firstChild){
-                                        departmentSelect.removeChild(departmentSelect.firstChild)
-                                    }
-                                    document.getElementById('deleteConfirmMsg').style.display = 'block';
-                                    document.getElementById('deleteDepMsg').style.display = 'none';
-                                    let text = `Department successfully deleted.`;
-                                    document.getElementById('deleteConfirmMsg').innerHTML = text;
-                                    document.getElementById('deleteDepartmentConfirm').style.display = 'none';
-                                    
-                                
-                                    departmentFill();
-                                },
-                                error:function(err){
-                                    console.log(err);
-                                }
+                               url: 'libs/php/getPersonnelForDepartment.php',
+                               dataType: 'JSON',
+                               type: 'POST',
+                               data: {
+                                id: departmentSelect.value
+                               },
+                               success:function(res){
+                                   if(res.data.personnel.length !== 0){
+                                       console.log('winning')
+                                       document.getElementById('deleteConfirmMsg').style.display = 'block';
+                                       document.getElementById('deleteDepMsg').style.display = 'none';
+                                       let text = `Department could not be deleted because this department contains employees.`;
+                                       document.getElementById('deleteConfirmMsg').innerHTML = text;
+                                       document.getElementById('deleteDepartmentConfirm').style.display = 'none';
+                                   } else {
+                                    $.ajax({
+                                        url: 'libs/php/deleteDepartment.php',
+                                        dataType: 'JSON',
+                                        'type': 'POST',
+                                        data:{
+                                            id: departmentSelect.value
+                                        },
+                                        success:function(res){
+                                            console.log(res);
+        
+                                            while(departmentSelect.firstChild){
+                                                departmentSelect.removeChild(departmentSelect.firstChild)
+                                            }
+                                            document.getElementById('deleteConfirmMsg').style.display = 'block';
+                                            document.getElementById('deleteDepMsg').style.display = 'none';
+                                            let text = `Department successfully deleted.`;
+                                            document.getElementById('deleteConfirmMsg').innerHTML = text;
+                                            document.getElementById('deleteDepartmentConfirm').style.display = 'none';
+                                            
+                                        
+                                            departmentFill();
+                                        },
+                                        error:function(err){
+                                            console.log(err);
+                                        }
+                                    })
+                                   }
+                                   console.log(res)
+                               },
+                               error:function(res){
+                                   console.log(res)
+                               } 
                             })
+
+                            
                         })
 
                     },
@@ -939,7 +963,7 @@ function deleteLocation(){
                 el.value = id;
                 locationSelect.appendChild(el);
             }
-            $('#deleteLocation').on('click', function(){
+            $('#deleteLocation').on('click', function(){       
                 $.ajax({
                     url: 'libs/php/getLocation.php',
                     dataType:'JSON',
@@ -959,32 +983,57 @@ function deleteLocation(){
                 })
             })
 
+            
             $('#deleteLocationConfirm').on('click', function(){
+
                 $.ajax({
-                    url: 'libs/php/deleteLocation.php',
+                    url: 'libs/php/getDepartmentForLocation.php',
                     dataType: 'JSON',
                     type: 'POST',
                     data:{
                         id: locationSelect.value
                     },
                     success:function(res){
-                        console.log(res);
-                        while(locationSelect.firstChild){
-                            locationSelect.removeChild(locationSelect.firstChild)
+                        console.log(res)
+                        if(res.data.personnel.length !== 0){
+                            let text = `Location could not be deleted because it contains departments.`
+                            document.getElementById('deleteLocMsg').style.display = 'none';
+                            document.getElementById('deleteLocConfirmMsg').style.display = 'block';
+                            document.getElementById('deleteLocConfirmMsg').innerHTML = text;
+                             document.getElementById('deleteLocationConfirm').style.display = 'none';
+                        } else {
+                            $.ajax({
+                                url: 'libs/php/deleteLocation.php',
+                                dataType: 'JSON',
+                                type: 'POST',
+                                data:{
+                                    id: locationSelect.value
+                                },
+                                success:function(res){
+                                    console.log(res);
+                                    while(locationSelect.firstChild){
+                                        locationSelect.removeChild(locationSelect.firstChild)
+                                    }
+                                   let text = `Location successfully deleted.`
+                                   document.getElementById('deleteLocMsg').style.display = 'none';
+                                   document.getElementById('deleteLocConfirmMsg').style.display = 'block';
+                                   document.getElementById('deleteLocConfirmMsg').innerHTML = text;
+                                    document.getElementById('deleteLocationConfirm').style.display = 'none';
+                            
+                                    
+                                    locationFill();
+                                },
+                                error:function(err){
+                                    console.log(err);
+                                }
+                            })
                         }
-                       let text = `Location successfully deleted.`
-                       document.getElementById('deleteLocMsg').style.display = 'none';
-                       document.getElementById('deleteLocConfirmMsg').style.display = 'block';
-                       document.getElementById('deleteLocConfirmMsg').innerHTML = text;
-                        document.getElementById('deleteLocationConfirm').style.display = 'none';
-                
-                        
-                        locationFill();
                     },
                     error:function(err){
-                        console.log(err);
+                        console.log(err)
                     }
                 })
+
             })
         }, 
         error:function(res){
