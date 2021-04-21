@@ -35,7 +35,7 @@ $email = $_POST['email'];
 $department = $_POST['department'];
 
 
-$sqldep = "SELECT * from department WHERE name = '$department'";
+$sqldep = "SELECT * from department WHERE id = '$department'";
 $result2 = $conn->query($sqldep);
 $arr=[];
 while ($row = mysqli_fetch_assoc($result2)){

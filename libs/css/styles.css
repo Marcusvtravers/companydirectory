@@ -152,7 +152,7 @@ section{
 
 .table-container{
     border: 1px solid black;
-    height: 70vh;
+    height: 68vh;
     overflow:scroll;
 }
 
@@ -178,9 +178,40 @@ section{
    
 }
 .tables{
-    display:flex;
+   display:flex;
+   justify-content: space-between;
+   align-items: center;
     border: 1px solid black;
     width: 50%;
     background-color: #656565;
     color:white;
+    padding:0;
+    margin:0;
+    
+}
+.personnel-names{
+    font-size: 1.2em;
+    font-weight: bold;
+  
+
+}
+
+.table-info{
+
+    color:white;
+    margin-left: 5px;
+    padding: 10px;
+}
+.table-buttons{
+  
+    margin: 20px;
+   
+    width: 30%;  
+    display: flex;
+    justify-content: space-around;
+}
+.personnel-info-table tr td{
+    padding:0;
+    margin: 0;
+  
 }

@@ -16,17 +16,25 @@ function getUsers(){
                 const id = res.data[i].id
                 
                 const table = `<div class="tables">
-  <table>
-  <tr class="table-names"><td>${firstName} ${lastName}</td></tr>
-  
-  <tr><td>${department}</td></tr>
-  <tr><td>${location}</td></tr>
-  <tr><td>${email}</td></tr>
-  </table>
+  <div class="table-info">
+  <div class="personnel-names">
+  <span>${firstName} ${lastName}</span></br>
+</div>
+<div class="personnel-info">
+    <table class="personnel-info-table">
+    <tr><td>${department}</td></tr>
+    <tr><td>${location}</td></tr>
+    <tr><td>${email}</td></tr>
+    </table>
+</div>
+    
+  </div>
   <div class="table-buttons">
-  <a  onclick="updateUser(${id})"  >Update</a>
-  <a onclick="deleteUser(${id})">Delete</a>
  
+
+  <a  onclick="updateUser(${id})"  >Update</a>
+
+  <a onclick="deleteUser(${id})">Delete</a>
   </div>
  </div>`;
 
@@ -41,18 +49,12 @@ function getUsers(){
     })
 }
 
-
-
-
-
-
-
 function addUser(){
  
     $('#addUserModal').modal('show');
     $('.close').on('click', function(){
         $('#addUserModal').modal('hide');
-        window.location.reload();
+        $('#addUser').off('click')
     })
     document.getElementById('lastName').value = '';
     document.getElementById('firstName').value = '';
@@ -88,7 +90,7 @@ function addUser(){
         $('#addUserModal').modal('show');
         $('.close').on('click', function(){
             $('#addUserConfirmModal').modal('hide');
-            window.location.reload();
+            $('#addUser').off('click');
         })
         let text = `Would you like to confirm ${firstNameConfirm.val()} ${lastNameConfirm.val()} - ${dep.text()} to the database`
         document.getElementById('addUserConfirmMessage').textContent = text;
@@ -143,10 +145,6 @@ error:function(err){
 })
 }
 
-
-
-
-
 function addDepartment(){
     
     $('#addDepartmentModal').modal('show');
@@ -171,10 +169,8 @@ function addDepartment(){
             }
 
             $('.close').one('click', function(){
-                $('#addDepartmentModal').modal('hide');
-          
-                console.log('clicked')
-                return;
+                $('#addDepartmentModal').modal('hide');  
+                $('#addDepartment').off('click')
             })
 
     $('#addDepartmentConfirm').one('click', function(){
@@ -186,22 +182,45 @@ function addDepartment(){
     let locName = $('#addDepartmentLocationModal option:selected');
     let text = `Are you sure you would like to add the new department ${depName.value} in the location ${locName.text()}`;
     document.getElementById('addDepartmentConfirmMessage').textContent = text;
-
+        
     $('.close').on('click', function(){
         $(this).off('click');
+        $('#addDepartmentConfirm').off('click');
         $('#addDepartmentConfirmModal').modal('hide');
-          
-    })
+        $('#addDepartment').off('click');
+    })    
+  
     $('#addDepartment').one('click', function(){
-            addDepartmentConfirm(depName.value, locName.val())
+        console.log(depName.value);
+         console.log(locName.val())
+    
+        $.ajax({
+            url: 'libs/php/addDepartment.php',
+            dataType:'JSON',
+            type:'POST',
+            
+            data:{
+                depName: depName.value,
+                depLocation: locName.val()
+            },
+            success:function(res){
+                depName.value == '';
+                locName.value == ''; 
+                console.log(res)
+                let completeText = `The new department ${depName.value} has been successfully added.`;
+                document.getElementById('addDepartmentConfirmMessage').textContent = completeText;
+                document.getElementById('addDepartment').style.display = 'none';
+                $("#departments-fill").empty();
+                departmentFill();
+               
+                
+            },
+            error:function(err){
+                console.log(err)
+            }
+        })
+        })
     })
-
-        
-    
-    })
-    
-
-    
 },
 error:function(res){
     console.log(res)
@@ -211,47 +230,34 @@ error:function(res){
   
 }
 
-function addDepartmentConfirm(depName, locName){
-console.log(depName, locName)
-$.ajax({
-    url: 'libs/php/addDepartment.php',
-    dataType:'JSON',
-    type:'POST',
-    
-    data:{
-        depName: depName,
-        depLocation: locName
-    },
-    success:function(res){
-        depName.value == '';
-        locName.value == ''; 
-        console.log(res)
-        let completeText = `The new department ${depName.value} has been successfully added.`;
-        document.getElementById('addDepartmentConfirmMessage').textContent = completeText;
-        document.getElementById('addDepartment').style.display = 'none';
-        $("#departments-fill").empty();
-        departmentFill();
-        
-    },
-    error:function(err){
-        console.log(err)
-    }
-})
-}
-
 
 
 function addLocation(){
-
+    document.getElementById('addLoca').value = '';
     $('#addLocationModal').modal('show'); 
-
     $('.close').on('click', function(){
-        $('#addLocationModal').modal('hide');   
+        $('#addLocationModal').modal('hide');
+        $('#addLocation').off('click');
+        $('#addLocationConfirm').off('click');
+       
     })
-    $('#addLocation').one('click', function(){
-          
+
+    $('#addLocationConfirm').one('click', function(){
+        $('#addLocationModal').modal('hide');  
+        $('#addLocationConfirmModal').modal('show'); 
         let locationName = document.getElementById('addLoca');
        console.log(locationName.value)
+    
+       let text = `Are you sure you would like to add the new location ${locationName.value}?`;
+       document.getElementById('addLocationConfirmMessage').textContent = text;
+
+       $('.close').on('click', function(){
+           $('#addLocationConfirm').off('click');
+        $('#addLocationConfirmModal').modal('hide');
+        $('#addLocation').off('click');
+        
+         })
+    $('#addLocation').one('click', function(){
         $.ajax({
             url: 'libs/php/addLocation.php',
             dataType: 'JSON',
@@ -260,8 +266,11 @@ function addLocation(){
                 locName: locationName.value
             },
             success:function(res){
-                $('#addLocationModal').modal('hide');
+               
                 locationName.value == '';
+                let completeText = `The new location ${locationName.value} has been successfully added.`;
+                document.getElementById('addLocationConfirmMessage').textContent = completeText;
+                document.getElementById('addLocation').style.display = 'none';
                 $("#location-fill").empty();
                 locationFill();
                 console.log(res)
@@ -270,29 +279,57 @@ function addLocation(){
                 console.log(err);
             }
         })
-    
+    })
     })
 }
 
 
 
 function deleteUser(id){
+    $('#deleteUserConfirmModal').modal('show');
 
     $.ajax({
-        url: 'libs/php/deleteUser.php',
+        url: 'libs/php/getPersonnel.php',
+        dataType: 'JSON',
         type: 'POST',
-        data:{
-            deleteId:id
+        data: {
+            id: id
         },
-        success: function(res){
-            //Maybe add a success message with user details
-  
-            $('.tableUsers').empty();
-            getUsers();
-        },
-        error: function(err){
+        success:function(res){
+            console.log(res)
+            let firstName = res.data.personnel[0].firstName
+            let lastName = res.data.personnel[0].lastName
+            let text = `Are you sure you want to delete ${firstName} ${lastName} from the database?`
+            document.getElementById('deleteUserConfirmMessage').textContent = text;
+           $('.close').on('click', function(){
+               $('#deleteUserConfirmModal').modal('hide');
+               $('#deleteUser').off('click');
+           })
+        $('#deleteUser').one('click', function(){
+            $.ajax({
+                url: 'libs/php/deleteUser.php',
+                type: 'POST',
+                data:{
+                    deleteId:id
+                },
+                success: function(res){
+                    //Maybe add a success message with user details
+                    let confirmText = `${firstName} ${lastName} has been deleted.`
+                    document.getElementById('deleteUserConfirmMessage').textContent = confirmText;
+                    document.getElementById('deleteUser').style.display = 'none'
+                    $('.tableUsers').empty();
+                    getUsers();
+                },
+                error: function(err){
+                    console.log(err)
+                 
+                }
+            })
+        
+        })
+    },
+        error:function(err){
             console.log(err)
-         
         }
     })
 }
@@ -300,39 +337,87 @@ function deleteUser(id){
 
 function updateUser(id){
     $('#updateModal').modal('show');
-    $('#update').one('click', function(){   
+    document.getElementById('userUpdateDiv').style.display = 'block';
+    document.getElementById('update').style.display = 'block';
+    document.getElementById('successMsg').textContent = '';
+    $('.close').on('click', function(){
+        $('#updateModal').modal('hide');
+        $('#update').off('click');
+    })
 
-    let firstName = $('#firstNameUpdateModal');
-    let lastName = $('#lastNameUpdateModal');
-    let department = document.getElementById('departmentUpdateModal').value;
-    let dep = department.charAt(0).toUpperCase() + department.slice(1);
-    let email = $('#emailUpdateModal');
-   
     $.ajax({
-        url: 'libs/php/updateUser.php',
+        url: 'libs/php/getPersonnel.php',
+        dataType: 'JSON',
         type: 'POST',
-        data: {
-            updateId: id,
-            firstName: firstName.val(),
-            lastName: lastName.val(),
-            department: dep,
-            email: email.val()
+        data:{
+            id:id
         },
         success:function(res){
-            $('#updateModal').modal('hide');
-            console.log(id)
+            $('#departmentUpdateModal').empty();
+            console.log(res)
             
-            firstName.val() == '';
-            lastName.val() == '';
-            email.val() == ''
-            $('.tableUsers').empty()
-            getUsers();
+           let departmentUpdateSelect = document.getElementById('departmentUpdateModal')
+           for (let i = 0; i < res.data.department.length; i++){
+            let depName = res.data.department[i].name;
+            let depid = res.data.department[i].id;
+            let el = document.createElement('option');
+            el.textContent = depName;
+            el.value = depid;
+            departmentUpdateSelect.appendChild(el);
+           }
+       
+    
+        console.log(departmentUpdateSelect.value)
+           let firstName = res.data.personnel[0].firstName
+           let lastName = res.data.personnel[0].lastName
+           let email = res.data.personnel[0].email
+      
+
+
+            document.getElementById('firstNameUpdateModal').value = firstName
+           document.getElementById('lastNameUpdateModal').value = lastName
+           
+           document.getElementById('emailUpdateModal').value = email
+           $('#update').one('click', function(){  
+            let firstNameVal = $('#firstNameUpdateModal') 
+            let lastNameVal = $('#lastNameUpdateModal')
+            let depValue = departmentUpdateSelect.value
+            let emailVal = $('#emailUpdateModal')
+            console.log(firstNameVal.val())
+            console.log(lastNameVal.val())
    
+            $.ajax({
+                url: 'libs/php/updateUser.php',
+                type: 'POST',
+                data: {
+                    updateId: id,
+                    firstName: firstNameVal.val(),
+                    lastName: lastNameVal.val(),
+                    department: depValue,
+                    email: emailVal.val()
+                },
+                success:function(res){
+                    const text = `The user ${firstNameVal.val()} ${lastNameVal.val()} was successfully updated.` 
+                    document.getElementById('userUpdateDiv').style.display = 'none';
+                    document.getElementById('successMsg').textContent = text;
+                    document.getElementById('update').style.display = 'none';
+                    firstNameVal.val() == '';
+                    lastNameVal.val() == '';
+                    emailVal.val() == ''
+                    $('.tableUsers').empty()
+                    getUsers();
+
+           
+                },
+                error:function(err){
+                    console.log(err)
+                }
+            })
+        })
         },
         error:function(err){
             console.log(err)
         }
-    })
     })
 }
 
@@ -396,6 +481,7 @@ function justOrderBy(){
 
 
 function locationFill(){
+
     $.ajax({
         url: 'libs/php/locationFill.php',
         dataType: 'JSON',
@@ -420,10 +506,11 @@ function locationFill(){
             
 
             $('#location-fill').change(function(){
-                $(this).off('change');
+                
                 document.getElementById('defaultSearch').style.display = 'none';
                 document.getElementById('orderBy').style.display = 'block';
                 departmentForOrder(locationSelect.value)
+                
             })
             
         },
@@ -458,25 +545,16 @@ function departmentForOrder(id){
                 el.value = id;
                 departmentSelect.appendChild(el);
             }
-            $('#orderBy').on('click', function(){
-                $(this).off('click')
-                departmentFill();
-                locationFill();
+            $('#orderBy').on('click', function(){ 
                 searchDisplay(departmentSelect.value, id, orderBy.value, direction.value)
                 console.log(departmentSelect.value);
                 console.log(orderBy.value);
-                console.log(direction.value);
-                
-
-              
+                console.log(direction.value);         
             })
             
         },
     })
 }
-
-
-
 
 
 function searchDisplay(departmentSelect, locationId, orderBySelect, directionValue){
@@ -504,20 +582,28 @@ function searchDisplay(departmentSelect, locationId, orderBySelect, directionVal
                 const locationId = res.data[i].locationId;
                 const id = res.data[i].id
                 
-                const table = `<div class="tables">
-                    <table>
-                    <tr class="table-names"><td>${firstName} ${lastName}</td></tr>
-                    
-                    <tr><td>${department}</td></tr>
-                    <tr><td>${location}</td></tr>
-                    <tr><td>${email}</td></tr>
-                    </table>
-                    <div class="table-buttons">
-                    <a  onclick="updateUser(${id})"  >Update</a>
-                    <a onclick="deleteUser(${id})">Delete</a>
-                    
-                    </div>
-                    </div>`;
+                const table =`<div class="tables">
+                <div class="table-info">
+                <div class="personnel-names">
+                <span>${firstName} ${lastName}</span></br>
+              </div>
+              <div class="personnel-info">
+                  <table class="personnel-info-table">
+                  <tr><td>${department}</td></tr>
+                  <tr><td>${location}</td></tr>
+                  <tr><td>${email}</td></tr>
+                  </table>
+              </div>
+                  
+                </div>
+                <div class="table-buttons">
+               
+              
+                <a  onclick="updateUser(${id})"  >Update</a>
+              
+                <a onclick="deleteUser(${id})">Delete</a>
+                </div>
+               </div>`;
 
 
                 
@@ -561,19 +647,27 @@ function searchBarDisplay(){
                 const id = res.data[i].id
                 
                 const table = `<div class="tables">
-                    <table>
-                    <tr class="table-names"><td>${firstName} ${lastName}</td></tr>
-                    
-                    <tr><td>${department}</td></tr>
-                    <tr><td>${location}</td></tr>
-                    <tr><td>${email}</td></tr>
-                    </table>
-                    <div class="table-buttons">
-                    <a  onclick="updateUser(${id})"  >Update</a>
-                    <a onclick="deleteUser(${id})">Delete</a>
-                    
-                    </div>
-                    </div>`;
+                <div class="table-info">
+                <div class="personnel-names">
+                <span>${firstName} ${lastName}</span></br>
+              </div>
+              <div class="personnel-info">
+                  <table class="personnel-info-table">
+                  <tr><td>${department}</td></tr>
+                  <tr><td>${location}</td></tr>
+                  <tr><td>${email}</td></tr>
+                  </table>
+              </div>
+                  
+                </div>
+                <div class="table-buttons">
+               
+              
+                <a  onclick="updateUser(${id})"  >Update</a>
+              
+                <a onclick="deleteUser(${id})">Delete</a>
+                </div>
+               </div>`;
 
 
                 
@@ -594,6 +688,16 @@ searchBar.addEventListener('keyup', searchBarDisplay);
 
 function editDepartment(){  
     $('#editDepartmentModal').modal('show');
+    $('#department-fill-for-edit').empty();
+    document.getElementById('editDepartmentName').value = "";
+    document.getElementById('editDepSuccessMsg').textContent = "";
+    document.getElementById('editDepartmentConfirm').style.display = "block";
+    document.getElementById('editDepartmentForm').style.display = 'block';
+    $('.close').on('click', function(){
+        $('#editDepartmentModal').modal('hide');
+        $('#editDepartmentConfirm').off('click');
+    })
+
     $.ajax({
         url: 'libs/php/departmentFill.php',
         dataType: 'JSON',
@@ -608,12 +712,13 @@ function editDepartment(){
                 el.textContent = depName;
                 el.value = id;
                 departmentSelect.appendChild(el);
+                
             }
             $('#editDepartmentConfirm').on('click', function(){
                 
                 const newDep = document.getElementById('editDepartmentName');
-                console.log(newDep);
-                $('#editDepartmentModal').modal('hide');
+               
+               
                 $.ajax({
                     url: 'libs/php/editDepartment.php',
                     dataType: 'JSON',
@@ -624,8 +729,13 @@ function editDepartment(){
                     },
                     success:function(res){
                         departmentSelect.innerHTML="";
-
+                        document.getElementById('editDepartmentForm').style.display = 'none';
+                        document.getElementById('editDepSuccessMsg').style.display = 'block';
+                        document.getElementById('editDepSuccessMsg').innerHTML = "Department Successfully Updated";
+                        document.getElementById('editDepartmentConfirm').style.display = "none";
                         departmentFill();
+                        $('.tableUsers').empty();
+                        getUsers();
                 },
                     error:function(err){
                         console.log(err);
@@ -642,11 +752,24 @@ function editDepartment(){
 
 function deleteDepartment(){
     $('#deleteDepartmentModal').modal('show');
+    document.getElementById('deleteDepartmentConfirm').style.display = 'none'
+    document.getElementById('deleteDepartment').style.display = 'block';
+    document.getElementById('deleteDepMsg').textContent = ''
+    document.getElementById('deleteConfirmMsg').innerHTML = '';
+    document.getElementById('department-delete-form').style.display = 'block'
+
+    $('#department-fill-for-delete').empty();
+    $('.close').on('click', function(){
+        $('#deleteDepartmentModal').modal('hide');
+        $('#deleteDepartment').off('click');
+        $('#deleteDepartmentConfirm').off('click');
+    })
     $.ajax({
         url:'libs/php/departmentFill.php',
         dataType: 'JSON',
         type: 'POST',
         success:function(res){
+            $('departmentSelect').empty();
             var departmentSelect = document.getElementById('department-fill-for-delete');
             for(let i = 0; i < res.data.length; i++){
                 let depName = res.data[i].name;
@@ -657,27 +780,62 @@ function deleteDepartment(){
                 departmentSelect.appendChild(el);
             }
             console.log(res)
-            $('#deleteDepartmentConfirm').on('click', function(){
-                $.ajax({
-                    url: 'libs/php/deleteDepartment.php',
-                    dataType: 'JSON',
-                    'type': 'POST',
-                    data:{
-                        id: departmentSelect.value
-                    },
-                    success:function(res){
-                        console.log(res);
-                        while(departmentSelect.firstChild){
-                            departmentSelect.removeChild(departmentSelect.firstChild)
-                        }
-                        $('#deleteDepartmentModal').modal('hide');
-                        departmentFill();
+
+            $('#deleteDepartment').on('click', function(){
+             console.log(departmentSelect.value)
+                    $.ajax({
+                        url:'libs/php/getDepartment.php',
+                        dataType: 'JSON',
+                        type: 'POST',
+                        data:{
+                            id: departmentSelect.value
+                        },
+                        success:function(res){
+                        console.log(res) 
+                            let deleteDep = res.data.department[0].name
+                            document.getElementById('department-delete-form').style.display = 'none';
+                            document.getElementById('deleteDepMsg').style.display = 'block';
+                            let msg = `Are you sure you would like to delete ${deleteDep} from the database?`
+                            document.getElementById('deleteDepMsg').textContent = msg;
+                            document.getElementById('deleteDepartment').style.display = 'none';
+                            document.getElementById('deleteDepartmentConfirm').style.display = 'block'
+
+                        $('#deleteDepartmentConfirm').on('click', function(){
+                            
+                            $.ajax({
+                                url: 'libs/php/deleteDepartment.php',
+                                dataType: 'JSON',
+                                'type': 'POST',
+                                data:{
+                                    id: departmentSelect.value
+                                },
+                                success:function(res){
+                                    console.log(res);
+
+                                    while(departmentSelect.firstChild){
+                                        departmentSelect.removeChild(departmentSelect.firstChild)
+                                    }
+                                    document.getElementById('deleteConfirmMsg').style.display = 'block';
+                                    document.getElementById('deleteDepMsg').style.display = 'none';
+                                    let text = `Department successfully deleted.`;
+                                    document.getElementById('deleteConfirmMsg').innerHTML = text;
+                                    document.getElementById('deleteDepartmentConfirm').style.display = 'none';
+                                    
+                                
+                                    departmentFill();
+                                },
+                                error:function(err){
+                                    console.log(err);
+                                }
+                            })
+                        })
+
                     },
                     error:function(err){
-                        console.log(err);
+                        console.log(err)
                     }
                 })
-            })
+            }) 
            
         },
         error:function(err){
@@ -688,6 +846,15 @@ function deleteDepartment(){
 
 function editLocation(){
     $('#editLocationModal').modal('show');
+    $('.close').on('click', function(){
+        $('#editLocationModal').modal('hide');
+        $('#editLocationConfirm').off('click');
+    })
+    document.getElementById('editLocationName').value = '';
+    document.getElementById('editLocationSuccessMsg').style.display = 'none';
+    document.getElementById('editLocationForm').style.display = 'block';
+    document.getElementById('editLocationConfirm').style.display = 'block';
+    $('#location-fill-for-edit').empty();
     $.ajax({
         url: 'libs/php/locationFill.php',
         dataType: 'JSON',
@@ -703,7 +870,8 @@ function editLocation(){
                 el.value = id;
                 locationSelect.appendChild(el);
             }
-            $('#editLocationConfirm').on('click', function(){
+
+            $('#editLocationConfirm').one('click', function(){
                 let editLoc = document.getElementById('editLocationName');
                 console.log('Working')
                 $.ajax({
@@ -716,9 +884,15 @@ function editLocation(){
                     },
                     success:function(res){
                         console.log(res);
-                        $('#editLocationModal').modal('hide');
+                        document.getElementById('editLocationForm').style.display = 'none';
+                        document.getElementById('editLocationConfirm').style.display = 'none'
+                        document.getElementById('editLocationSuccessMsg').style.display = 'block';
+                        let text = `Location successfully changed.`
+                        document.getElementById('editLocationSuccessMsg').innerHTML = text;
+                       // $('#editLocationModal').modal('hide');
                         locationSelect.innerHTML="";
                         locationFill();
+
                     },
                     error:function(err){
                         console.log(err);
@@ -733,7 +907,18 @@ function editLocation(){
 }
 
 function deleteLocation(){
+    $('#location-fill-for-delete').empty();
     $('#deleteLocationModal').modal('show');
+    document.getElementById('deleteLocMsg').innerHTML = "";
+    document.getElementById('deleteLocationForm').style.display = 'block';
+    document.getElementById('deleteLocConfirmMsg').innerHTML = '';
+    document.getElementById('deleteLocationConfirm').style.display = 'none';
+    document.getElementById('deleteLocation').style.display = 'block';
+    $('.close').on('click', function(){
+        $('#deleteLocationModal').modal('hide');
+        $('#deleteLocation').off('click');
+        $('#deleteLocationConfirm').off('click');
+    })
     $.ajax({
         url: 'libs/php/locationFill.php',
         dataType: 'JSON',
@@ -749,6 +934,26 @@ function deleteLocation(){
                 el.value = id;
                 locationSelect.appendChild(el);
             }
+            $('#deleteLocation').on('click', function(){
+                $.ajax({
+                    url: 'libs/php/getLocation.php',
+                    dataType:'JSON',
+                    type: 'POST',
+                    data:{
+                        id: locationSelect.value
+                    },
+                    success:function(res){
+                        let locName = res.data.department[0].name;
+                        let text = `Are you sure you want to delete ${locName} from the database?`
+                        document.getElementById('deleteLocationForm').style.display = 'none';
+                        document.getElementById('deleteLocation').style.display = 'none';
+                        document.getElementById('deleteLocMsg').style.display = 'block';
+                        document.getElementById('deleteLocMsg').innerHTML = text;
+                        document.getElementById('deleteLocationConfirm').style.display = 'block';
+                    }
+                })
+            })
+
             $('#deleteLocationConfirm').on('click', function(){
                 $.ajax({
                     url: 'libs/php/deleteLocation.php',
@@ -762,7 +967,13 @@ function deleteLocation(){
                         while(locationSelect.firstChild){
                             locationSelect.removeChild(locationSelect.firstChild)
                         }
-                        $('#deleteLocationModal').modal('hide');
+                       let text = `Location successfully deleted.`
+                       document.getElementById('deleteLocMsg').style.display = 'none';
+                       document.getElementById('deleteLocConfirmMsg').style.display = 'block';
+                       document.getElementById('deleteLocConfirmMsg').innerHTML = text;
+                        document.getElementById('deleteLocationConfirm').style.display = 'none';
+                
+                        
                         locationFill();
                     },
                     error:function(err){
@@ -783,4 +994,13 @@ getUsers();
 departmentFill();
 
 locationFill();
+
+
+
+
+
+
+
+
+
 

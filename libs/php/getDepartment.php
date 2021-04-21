@@ -1,7 +1,7 @@
 <?php
 
 	// example use from browser
-	// http://localhost/companydirectory/libs/php/insertDepartment.php?name=New%20Department&locationID=1
+	// http://localhost/companydirectory/libs/php/getPersonnel.php?id=1
 
 	// remove next two lines for production
 	
@@ -32,9 +32,9 @@
 
 	}	
 
-	// $_REQUEST used for development / debugging. Remember to cange to $_POST for production
+	// first query
 
-	$query = 'INSERT INTO department (name, locationID) VALUES("' . $_REQUEST['name'] . '",' . $_REQUEST["locationID"] . ')';
+	$query = 'SELECT * from department WHERE id =' . $_REQUEST['id'];
 
 	$result = $conn->query($query);
 	
@@ -52,12 +52,22 @@
 		exit;
 
 	}
+   
+   	$personnel = [];
+
+	while ($row = mysqli_fetch_assoc($result)) {
+
+		array_push($personnel, $row);
+
+	}
+
 
 	$output['status']['code'] = "200";
 	$output['status']['name'] = "ok";
 	$output['status']['description'] = "success";
 	$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
-	$output['data'] = [];
+	$output['data']['department'] = $personnel;
+
 	
 	mysqli_close($conn);
 

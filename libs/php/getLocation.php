@@ -1,5 +1,8 @@
 <?php
 
+	// example use from browser
+	// http://localhost/companydirectory/libs/php/getPersonnel.php?id=1
+
 	// remove next two lines for production
 	
 	ini_set('display_errors', 'On');
@@ -29,7 +32,9 @@
 
 	}	
 
-	$query = 'SELECT * FROM location';
+	// first query
+
+	$query = 'SELECT * from location WHERE id =' . $_REQUEST['id'];
 
 	$result = $conn->query($query);
 	
@@ -48,19 +53,21 @@
 
 	}
    
-   	$data = [];
+   	$personnel = [];
 
 	while ($row = mysqli_fetch_assoc($result)) {
 
-		array_push($data, $row);
+		array_push($personnel, $row);
 
 	}
+
 
 	$output['status']['code'] = "200";
 	$output['status']['name'] = "ok";
 	$output['status']['description'] = "success";
 	$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
-	$output['data'] = $data;
+	$output['data']['department'] = $personnel;
+
 	
 	mysqli_close($conn);
 
