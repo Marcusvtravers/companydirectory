@@ -94,6 +94,7 @@ function addUser(){
         })
         let text = `Would you like to confirm ${firstNameConfirm.val()} ${lastNameConfirm.val()} - ${dep.text()} to the database`
         document.getElementById('addUserConfirmMessage').textContent = text;
+        document.getElementById('addUser').style.display = 'block';
     }); 
 
     $('#addUser').one('click', function(){
@@ -301,11 +302,13 @@ function deleteUser(id){
             let lastName = res.data.personnel[0].lastName
             let text = `Are you sure you want to delete ${firstName} ${lastName} from the database?`
             document.getElementById('deleteUserConfirmMessage').textContent = text;
+            document.getElementById('deleteUser').style.display = 'block';
            $('.close').on('click', function(){
                $('#deleteUserConfirmModal').modal('hide');
                $('#deleteUser').off('click');
            })
-        $('#deleteUser').one('click', function(){
+        $('#deleteUser').on('click', function(){
+
             $.ajax({
                 url: 'libs/php/deleteUser.php',
                 type: 'POST',
@@ -313,10 +316,12 @@ function deleteUser(id){
                     deleteId:id
                 },
                 success: function(res){
+
                     //Maybe add a success message with user details
                     let confirmText = `${firstName} ${lastName} has been deleted.`
                     document.getElementById('deleteUserConfirmMessage').textContent = confirmText;
                     document.getElementById('deleteUser').style.display = 'none'
+
                     $('.tableUsers').empty();
                     getUsers();
                 },
