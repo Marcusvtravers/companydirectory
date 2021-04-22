@@ -89,6 +89,12 @@
 		array_push($department, $row);
 
 	}
+	
+if(count($personnel) > 0){
+	$output['data']['personnel'] = $personnel;
+} else {
+	$output['data']['personnel'] = 'No Data Available';
+}
 
 	$output['status']['code'] = "200";
 	$output['status']['name'] = "ok";

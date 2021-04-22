@@ -35,12 +35,83 @@
 
 	// $_REQUEST used for development / debugging. Remember to cange to $_POST for production
 
-
     $id = $_POST['id'];
+    
 
+	// first query
+
+	$query = 'SELECT * from personnel WHERE departmentID =' . $_REQUEST['id'];
+
+	$result = $conn->query($query);
 	
+	if (!$result) {
 
-	$query = "DELETE FROM department WHERE id = '$id'";
+		$output['status']['code'] = "400";
+		$output['status']['name'] = "executed";
+		$output['status']['description'] = "query failed";	
+		$output['data'] = [];
+
+		mysqli_close($conn);
+
+		echo json_encode($output); 
+
+		exit;
+
+	}
+   
+   	$personnel = [];
+
+	while ($row = mysqli_fetch_assoc($result)) {
+
+		array_push($personnel, $row);
+
+	}
+
+	// second query
+
+	$query = 'SELECT id, name from department ORDER BY id';
+
+	$result = $conn->query($query);
+	
+	if (!$result) {
+
+		$output['status']['code'] = "400";
+		$output['status']['name'] = "executed";
+		$output['status']['description'] = "query failed";	
+		$output['data'] = [];
+
+		mysqli_close($conn);
+
+		echo json_encode($output); 
+
+		exit;
+
+	}
+   
+   	$department = [];
+
+	while ($row = mysqli_fetch_assoc($result)) {
+
+		array_push($department, $row);
+
+	}
+	
+	if(count($personnel) > 0){
+		$output['data']['personnel'] = $personnel;
+		$output['data']['message'] = 'Location could not be deleted because it contains departments.';
+	} else {
+	$output['data']['message'] = 'Location successfully deleted.';
+		$query = "DELETE FROM department WHERE id = '$id'";
+	}
+
+	$output['status']['code'] = "200";
+	$output['status']['name'] = "ok";
+	$output['status']['description'] = "success";
+	$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
+
+	$output['data']['department'] = $department;
+
+
 
 	$result = $conn->query($query);
 	
@@ -59,12 +130,6 @@
 
 	}
     
-	$output['status']['code'] = "200";
-	$output['status']['name'] = "ok";
-	$output['status']['description'] = "success";
-	$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
-	$output['data'] = [];
-	
 	mysqli_close($conn);
 
 	echo json_encode($output); 

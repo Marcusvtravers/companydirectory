@@ -38,7 +38,80 @@
     $id = $_POST['id'];
     
 
-	$query = "DELETE FROM location WHERE id = '$id'";
+	// first query
+
+	$query = 'SELECT * from department WHERE locationID =' . $_REQUEST['id'];
+
+	$result = $conn->query($query);
+	
+	if (!$result) {
+
+		$output['status']['code'] = "400";
+		$output['status']['name'] = "executed";
+		$output['status']['description'] = "query failed";	
+		$output['data'] = [];
+
+		mysqli_close($conn);
+
+		echo json_encode($output); 
+
+		exit;
+
+	}
+   
+   	$personnel = [];
+
+	while ($row = mysqli_fetch_assoc($result)) {
+
+		array_push($personnel, $row);
+
+	}
+
+	// second query
+
+	$query = 'SELECT id, name from location ORDER BY id';
+
+	$result = $conn->query($query);
+	
+	if (!$result) {
+
+		$output['status']['code'] = "400";
+		$output['status']['name'] = "executed";
+		$output['status']['description'] = "query failed";	
+		$output['data'] = [];
+
+		mysqli_close($conn);
+
+		echo json_encode($output); 
+
+		exit;
+
+	}
+   
+   	$department = [];
+
+	while ($row = mysqli_fetch_assoc($result)) {
+
+		array_push($department, $row);
+
+	}
+	
+	if(count($personnel) > 0){
+		$output['data']['personnel'] = $personnel;
+		$output['data']['message'] = 'Location could not be deleted because it contains departments.';
+	} else {
+	$output['data']['message'] = 'Location successfully deleted.';
+		$query = "DELETE FROM location WHERE id = '$id'";
+	}
+
+	$output['status']['code'] = "200";
+	$output['status']['name'] = "ok";
+	$output['status']['description'] = "success";
+	$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
+
+	$output['data']['department'] = $department;
+
+
 
 	$result = $conn->query($query);
 	
@@ -57,12 +130,6 @@
 
 	}
     
-	$output['status']['code'] = "200";
-	$output['status']['name'] = "ok";
-	$output['status']['description'] = "success";
-	$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
-	$output['data'] = [];
-	
 	mysqli_close($conn);
 
 	echo json_encode($output); 
