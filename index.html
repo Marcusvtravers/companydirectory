@@ -14,13 +14,31 @@
 </head>
 <body>
   <header>
+    <div class="options">
+      <i class="fas fa-bars"></i>
+    </div>
     <div class="title">
       <h1>Company Directory</h1>
       <h5>Directing... Made Easy</h5>
     </div>
+    <div class="add-options">
+      <i class="fas fa-plus"></i>
+    </div>
   </header>
-
+<div id="dropdown-small">
+  <div class="dropdown-small-items" onclick="addUser()">
+  <a href="#" >Add Employee</a>
+  </div>
+  <div class="dropdown-small-items" onclick="addDepartment()">
+  <a href="#" >Add Department</a>
+  </div>
+  <div class="dropdown-small-items" onclick="addLocation()">
+  <a href="#" >Add Location</a>
+</div>
+</div>
 <section>
+
+  
   <div class="left-side-body">
     <div class="left-side-items">
       <div class="add-user-buttons">
@@ -66,10 +84,7 @@
               <a href="#" onclick="deleteDepartment()">Delete</a>
             </div>
           </div>
-            <!--
-              <input type="checkbox"><label><span class="departmentfillitem">All</span></label></br>
-              <form id="departments-fill">
-              -->
+        
               <select id="department-first">
                 <option value="">All</option>
               </select>
@@ -103,6 +118,7 @@
   <div class="right-side-body">
     <div class="right-side-top">
       <h4>Employees</h4>
+      
       <input type="text" placeholder="Search" id="searchBar">
     </div>
     <div class="table-container">
@@ -113,6 +129,86 @@
   </div>
 </section>
 
+
+<!-- Small screen left-side modal-->
+<div class="modal fade" id="smallScreenOptionsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="smallScreenOptionsUserModalLabel">Search</h5>
+        <button type="button" class="close btn-close"  aria-label="Close"></button>
+
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="database-manipulation-modal">
+          
+          <div class="location-div">
+            <div class="departments-header-modal">
+              <div class="departments-title">
+                <span>Location</span>
+              </div>
+            <div class="departments-crud">
+              <a href="#" onclick="editLocation()">Edit</a>
+              <a href="#" onclick="deleteLocation()">Delete</a>
+            </div>
+          </div>
+          
+            <select id="location-fill-modal">
+              <option value="">All</option>
+            </select>
+  
+          </div>
+  
+            <div class="departments-div">
+              <div class="departments-header-modal">
+                <div class="departments-title">
+                  <span>Departments</span>
+                </div>
+              <div class="departments-crud">
+                <a href="#" onclick="editDepartment()">Edit</a>
+                <a href="#" onclick="deleteDepartment()">Delete</a>
+              </div>
+            </div>
+          
+                <select id="department-first-modal">
+                  <option value="">All</option>
+                </select>
+                <select id="department-fill-modal">
+                  <option value="">All</option>
+                </select>
+                </form>
+            </div>
+          
+  
+            <div class="order-by-div">
+              <div class="order-by-title">
+              <span>Order by</span></br>
+            </div>
+              <div class="order-by-selects">
+                <select id="order-by-select-modal">
+                  <option value="lastName">Name</option>
+                  <option value="department">Department</option>
+                  <option value="locationName">Location</option>
+                </select>
+                <select id="order-by-direction-modal">
+                  <option value="ASC">Asc</option>
+                  <option value="DESC">Desc</option>
+                </select>
+              </div>
+            </div>
+       
+          
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary close" data-dismiss="modal">Close</button>
+              <button type="button" class="button btn btn-primary" id='orderBy-modal'>Search</button>
+              <button type="button" class="button btn btn-primary" id="defaultSearch-modal" onclick="justOrderBy()">Search</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
   <!-- Add User Modal -->

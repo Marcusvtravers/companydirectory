@@ -1,5 +1,24 @@
+$('.fa-bars').on('click', function(){
+    $('#smallScreenOptionsModal').modal('show');
+    $('.close, #orderBy, #defaultSearch').on('click', function(){
+        $('#smallScreenOptionsModal').modal('hide'); 
+    
+})
+})
+
+$('.fa-plus').on('mouseover', function(){
+    $('#dropdown-small').slideDown('slow');
+    $('#dropdown-small').on('mouseleave', function(){
+        $('#dropdown-small').slideUp('slow');
+    })
+});
+
+
+
+
 
 function getUsers(){
+    
     $('.tableUsers').empty();
     $.ajax({
         url:'libs/php/getAll.php',
@@ -22,9 +41,8 @@ function getUsers(){
 </div>
 <div class="personnel-info">
     <table class="personnel-info-table">
-    <tr><td>${department}</td></tr>
-    <tr><td>${location}</td></tr>
     <tr><td>${email}</td></tr>
+    <tr><td>${department} - ${location}</td></tr>
     </table>
 </div>
     
@@ -32,9 +50,9 @@ function getUsers(){
   <div class="table-buttons">
  
 
-  <a  onclick="updateUser(${id})"  >Update</a>
+  <a  onclick="updateUser(${id})"  ><i class="fas fa-user-edit"></i></a>
 
-  <a onclick="deleteUser(${id})">Delete</a>
+  <a onclick="deleteUser(${id})"><i class="fas fa-trash-alt"></i></a>
   </div>
  </div>`;
 
@@ -48,6 +66,8 @@ function getUsers(){
         }
     })
 }
+
+
 
 function addUser(){
  
@@ -440,6 +460,10 @@ $.ajax({
         document.getElementById('department-fill').style.display = 'none';
         document.getElementById('defaultSearch').style.display = 'block';
         document.getElementById('orderBy').style.display = 'none';
+        document.getElementById('department-first-modal').style.display = 'block';
+        document.getElementById('department-fill-modal').style.display = 'none';
+        document.getElementById('defaultSearch-modal').style.display = 'block';
+        document.getElementById('orderBy-modal').style.display = 'none';
         let newVal = '<option value="">All</option>';
         $('#department-first').html(newVal);
         var departmentSelect = document.getElementById('department-first');
@@ -453,15 +477,45 @@ $.ajax({
             departmentSelect.appendChild(el);
             
             }
+            let newValModal = '<option value="">All</option>';
+            $('#department-first-modal').html(newValModal);
+            var departmentSelect = document.getElementById('department-first-modal');
+            for(let i = 0; i < res.data.length; i++){
+                let depName = res.data[i].name;
+                let id = res.data[i].id;
+                let locationId = res.data[i].locationId;
+                let el = document.createElement('option');
+                el.textContent = depName;
+                el.value = id;
+                departmentSelect.appendChild(el);
+                
+                }
+
+
+
             let orderBy = document.getElementById('order-by-select');
             let direction = document.getElementById('order-by-direction');
             $('#department-first').change(function(){
                 $(this).off('change');
+                $('#department-first-modal').off('change');
                 document.getElementById('defaultSearch').style.display = 'none';
                 document.getElementById('orderBy').style.display = 'block';
                 $('#orderBy').on('click', function(){
                 
                 searchDisplay(departmentSelect.value,"", orderBy.value, direction.value)
+                })
+                
+            })
+            let orderByModal = document.getElementById('order-by-select-modal');
+            let directionModal = document.getElementById('order-by-direction-modal');
+            $('#department-first-modal').change(function(){
+                $(this).off('change');
+                $('#department-first').off('change')
+                document.getElementById('defaultSearch-modal').style.display = 'none';
+                document.getElementById('orderBy-modal').style.display = 'block';
+                $('#orderBy-modal').on('click', function(){
+                
+                searchDisplay(departmentSelect.value,"", orderByModal.value, directionModal.value)
                 })
                 
             })
@@ -495,7 +549,9 @@ function locationFill(){
           
             document.getElementById('defaultSearch').style.display = 'block';
             document.getElementById('orderBy').style.display = 'none';
-            
+            document.getElementById('defaultSearch-modal').style.display = 'block';
+            document.getElementById('orderBy-modal').style.display = 'none';
+
             let newVal = '<option value="">All</option>';
             $('#location-fill').html(newVal);
             var locationSelect = document.getElementById('location-fill');
@@ -507,14 +563,35 @@ function locationFill(){
                 el.value = id;
                 locationSelect.appendChild(el);
 
-            }   
+            } 
+            let newValModal = '<option value="">All</option>';
+            $('#location-fill-modal').html(newValModal);
+            var locationSelectModal = document.getElementById('location-fill-modal');
+            for(let i = 0; i < res.data.length; i++){
+                let depName = res.data[i].name;
+                let id = res.data[i].id;
+                let el = document.createElement('option');
+                el.textContent = depName;
+                el.value = id;
+                locationSelectModal.appendChild(el);
+
+            } 
             
 
             $('#location-fill').change(function(){
-                
+                $('#location-fill-modal').off('change')
                 document.getElementById('defaultSearch').style.display = 'none';
                 document.getElementById('orderBy').style.display = 'block';
                 departmentForOrder(locationSelect.value)
+                
+            })
+            $('#location-fill-modal').change(function(){
+                $('#location-fill').off('change')
+                console.log('yes')
+                document.getElementById('defaultSearch-modal').style.display = 'none';
+                document.getElementById('orderBy-modal').style.display = 'block';
+                departmentForOrder(locationSelectModal.value)
+                
                 
             })
             
@@ -525,9 +602,13 @@ function locationFill(){
 })
 }
 
+
+
 function departmentForOrder(id){
     let orderBy = document.getElementById('order-by-select');
     let direction = document.getElementById('order-by-direction');
+    let orderByModal = document.getElementById('order-by-select-modal');
+    let directionModal = document.getElementById('order-by-direction-modal');
     $.ajax({
         url:'libs/php/departmentFillForOrder.php',
         dataType: 'JSON',
@@ -551,12 +632,35 @@ function departmentForOrder(id){
                 departmentSelect.appendChild(el);
             }
             $('#orderBy').on('click', function(){ 
+                $('#orderBy-modal').off('click');
                 searchDisplay(departmentSelect.value, id, orderBy.value, direction.value)
                 console.log(departmentSelect.value);
                 console.log(orderBy.value);
                 console.log(direction.value);         
             })
+            document.getElementById('department-first-modal').style.display = 'none';
+            document.getElementById('department-fill-modal').style.display = 'block';
+            let newValModal = '<option value="">All</option>';
+            $('#department-fill-modal').html(newValModal);
+            let departmentSelectModal = document.getElementById('department-fill-modal');
+            for (let i = 0; i < res.data.length; i++){
+                let depName = res.data[i].name;
+                let id = res.data[i].id;
+                let el = document.createElement('option');
+                el.textContent = depName;
+                el.value = id;
+                departmentSelectModal.appendChild(el);
+            }
+            $('#orderBy-modal').on('click', function(){ 
+                $('#orderBy').off('click');
+                searchDisplay(departmentSelectModal.value, id, orderByModal.value, directionModal.value)
+                console.log(departmentSelectModal.value);
+                console.log(orderByModal.value);
+                console.log(directionModal.value);  
+                $('#smallScreenOptionsModal').modal('hide');       
+            })
             
+
         },
     })
 }
@@ -564,7 +668,11 @@ function departmentForOrder(id){
 
 function searchDisplay(departmentSelect, locationId, orderBySelect, directionValue){
     console.log('working')
-        console.log(departmentSelect);
+    console.log(departmentSelect)
+    console.log(locationId)
+    console.log(orderBySelect)
+    console.log(directionValue)
+    console.log(departmentSelect);
         $.ajax({
             url:'libs/php/orderBy.php',
             dataType: 'JSON',
@@ -604,9 +712,9 @@ function searchDisplay(departmentSelect, locationId, orderBySelect, directionVal
                 <div class="table-buttons">
                
               
-                <a  onclick="updateUser(${id})"  >Update</a>
+                <a  onclick="updateUser(${id})"  ><i class="fas fa-user-edit"></i></a>
               
-                <a onclick="deleteUser(${id})">Delete</a>
+                <a onclick="deleteUser(${id})"><i class="fas fa-trash-alt"></i></a>
                 </div>
                </div>`;
 
@@ -658,9 +766,9 @@ function searchBarDisplay(){
               </div>
               <div class="personnel-info">
                   <table class="personnel-info-table">
-                  <tr><td>${department}</td></tr>
-                  <tr><td>${location}</td></tr>
                   <tr><td>${email}</td></tr>
+                  <tr><td>${department} - ${location}</td></tr>
+                 
                   </table>
               </div>
                   
@@ -668,9 +776,9 @@ function searchBarDisplay(){
                 <div class="table-buttons">
                
               
-                <a  onclick="updateUser(${id})"  >Update</a>
+                <a  onclick="updateUser(${id})"  ><i class="fas fa-user-edit"></i></a>
               
-                <a onclick="deleteUser(${id})">Delete</a>
+                <a onclick="deleteUser(${id})"><i class="fas fa-trash-alt"></i></a>
                 </div>
                </div>`;
 

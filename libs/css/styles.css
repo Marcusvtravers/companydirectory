@@ -13,34 +13,78 @@ header{
     background-color: #656565;
     color: white;
    display:flex;
-   justify-content: center;
+   justify-content: space-around;
    align-items: center;
-   height: 90px;
+   height: 10vh;
+}
+
+.fa-plus, .fa-bars{
+   font-size: 30px;
 }
 
 .title{
     text-transform: uppercase;
-    padding:0;
+    padding:3px;
     margin:10px;
+    display: flex;
+    flex-direction: column;
     
 }
 .title h1{
     font-weight: bold;
-    margin:0;
-    padding:0
+    margin:0 0 2px 0;
+    padding:0;
+    font-size: 1.4em;
 }
 .title h5{
-    margin:0;
+    margin:2px 0 0 0 ;
     padding:0;
+    font-size: 1em;
 }
 
 section{
     display:flex;
     justify-content: space-between;
-    margin: 4% auto 0 auto;
-   
+    margin: 0 auto 0 auto;
+  
 }
 
+.right-side-body{
+    width: 100%;
+    border: 5px solid white;
+}
+
+.left-side-body{
+    display: none;
+}
+
+#dropdown-small {
+   display:none; 
+   border:none;  
+}
+.dropdown-small-items{
+    text-align: center;
+    padding: 15px;
+    margin: 0px;
+   font-size: 1.2em;
+
+}
+.dropdown-small-items a{
+    text-decoration: none;
+    color: #000000;
+    cursor:pointer;
+}
+.dropdown-small-items:hover{
+    transition-duration: 0.5s;
+  background-color: #c9c9c9;
+  
+}
+
+
+
+
+
+/*
 .left-side-body{
     margin: 0 auto;
     width: 25%;
@@ -143,34 +187,92 @@ section{
 #orderBy{
     background-color: pink;
 }
+*/
+
+.modal-body{
+    margin: 0px auto 0px auto;
+    width: 60%;
+}
+
+.departments-header-modal{
+    display:flex;
+    justify-content: space-between;
+    padding: 5px;
+    font-size: 1.1em
+}
+.order-by-title{
+    padding: 5px;
+    font-size: 1.1em
+}
+.departments-crud{
+    width: 35%;
+    display:flex;
+    justify-content: space-between;
+}
+
+.location-div{
+    padding: 5px 0px 25px 0px;
+}
+.departments-div{
+    padding: 0px 0px 25px 0px;
+}
+.order-by-div{
+    padding: 0px 0px 10px 0px;
+}
+
+#location-fill-modal, #departments-fill-modal, #department-first-modal {
+  width: 100%;
+}
+
+.order-by-selects{
+    width: 100%;
+}
+#order-by-select-modal{
+    width: 70%;
+}
+#order-by-direction-modal{
+    width: 28%;
+}
+
+#orderBy-modal{
+    background-color:pink;
+}
+
 
 .right-side-body{
     background-color: white;
-    padding: 30px;
-    width: 70%
+    width: 100%
 }
 
 .table-container{
     border: 1px solid black;
-    height: 68vh;
+    height: 80vh;
     overflow:scroll;
 }
 
 .right-side-top{
     display:flex;
-    justify-content: space-between;
-    border:1px solid green;
-    padding: 10px;
-    margin: 10px;
+    justify-content: space-around;
+    align-items: center;
+    padding:15px 5px;
+    margin: 15px 10px;
 }
 
 .right-side-top h4{
     font-weight: bold;
+    display: none;
+}
+.fa-search{
+    margin-right: 5px;
+    color: #656565;
 }
 
 .right-side-top input{
-    width: 50%;
+    width: 100%;
+    border: 2px solid #8f8f8f;
+    border-radius: 6px;
 }
+
 
 .tableUsers{
     display:flex;
@@ -182,7 +284,7 @@ section{
    justify-content: space-between;
    align-items: center;
     border: 1px solid black;
-    width: 50%;
+    width: 100%;
     background-color: #656565;
     color:white;
     padding:0;
@@ -190,7 +292,7 @@ section{
     
 }
 .personnel-names{
-    font-size: 1.2em;
+    font-size: 1.3em;
     font-weight: bold;
   
 
@@ -205,7 +307,7 @@ section{
 .table-buttons{
   
     margin: 20px;
-   
+   font-size: 24px;
     width: 30%;  
     display: flex;
     justify-content: space-around;
