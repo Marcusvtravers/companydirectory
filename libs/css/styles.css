@@ -222,7 +222,7 @@ section{
     padding: 0px 0px 10px 0px;
 }
 
-#location-fill-modal, #departments-fill-modal, #department-first-modal {
+#location-fill-modal, #department-fill-modal, #department-first-modal {
   width: 100%;
 }
 
@@ -236,9 +236,7 @@ section{
     width: 28%;
 }
 
-#orderBy-modal{
-    background-color:pink;
-}
+
 
 .modal-forms{
     margin: 0 auto;
@@ -285,7 +283,7 @@ section{
 }
 
 .right-side-top input{
-    width: 100%;
+    width: 90%;
     border: 2px solid #8f8f8f;
     border-radius: 6px;
 }
