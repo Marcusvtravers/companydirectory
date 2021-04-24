@@ -6,6 +6,7 @@ html, body{
     width: 100%;
     box-sizing: border-box;
     background-color: #f5f5f5;
+    
 }
 
 header{
@@ -16,10 +17,11 @@ header{
    justify-content: space-around;
    align-items: center;
    height: 10vh;
+   min-height: 10vh;
 }
 
 .fa-plus, .fa-bars{
-   font-size: 30px;
+   font-size: 4vh;
 }
 
 .title{
@@ -34,12 +36,12 @@ header{
     font-weight: bold;
     margin:0 0 2px 0;
     padding:0;
-    font-size: 1.4em;
+    font-size: 3vh;
 }
 .title h5{
     margin:2px 0 0 0 ;
     padding:0;
-    font-size: 1em;
+    font-size: 2vh;
 }
 
 section{
@@ -189,6 +191,8 @@ section{
 }
 */
 
+
+
 .modal-body{
     margin: 0px auto 0px auto;
     width: 60%;
@@ -197,17 +201,15 @@ section{
 .departments-header-modal{
     display:flex;
     justify-content: space-between;
-    padding: 5px;
+  
     font-size: 1.1em
 }
 .order-by-title{
-    padding: 5px;
+    
     font-size: 1.1em
 }
-.departments-crud{
-    width: 35%;
-    display:flex;
-    justify-content: space-between;
+.departments-crud a{
+    margin-left: 20px;
 }
 
 .location-div{
@@ -238,24 +240,39 @@ section{
     background-color:pink;
 }
 
+.modal-forms{
+    margin: 0 auto;
+
+    padding: 15px 0px
+}
+.modal-forms input,.modal-forms select{
+    width: 80%;
+    margin-bottom: 15px;
+}
+
 
 .right-side-body{
     background-color: white;
-    width: 100%
+    width: 100%;
+    margin: auto;
+    height: 80vh;
+    padding:5px
 }
 
 .table-container{
     border: 1px solid black;
-    height: 80vh;
-    overflow:scroll;
+    height: 100%;
+    overflow: scroll;
+    margin: auto;
+    
 }
 
 .right-side-top{
     display:flex;
     justify-content: space-around;
     align-items: center;
-    padding:15px 5px;
-    margin: 15px 10px;
+    height: 10vh;
+
 }
 
 .right-side-top h4{
@@ -277,7 +294,7 @@ section{
 .tableUsers{
     display:flex;
     flex-wrap: wrap;
-   
+    
 }
 .tables{
    display:flex;

@@ -6,11 +6,8 @@ $('.fa-bars').on('click', function(){
 })
 })
 
-$('.fa-plus').on('mouseover', function(){
-    $('#dropdown-small').slideDown('slow');
-    $('#dropdown-small').on('mouseleave', function(){
-        $('#dropdown-small').slideUp('slow');
-    })
+$('.fa-plus').click(function(){
+    $('#dropdown-small').slideToggle('slow')
 });
 
 
@@ -801,6 +798,7 @@ searchBar.addEventListener('keyup', searchBarDisplay);
 
 function editDepartment(){  
     $('#editDepartmentModal').modal('show');
+    $('#smallScreenOptionsModal').modal('hide');
     $('#department-fill-for-edit').empty();
     document.getElementById('editDepartmentName').value = "";
     document.getElementById('editDepSuccessMsg').textContent = "";
@@ -865,6 +863,7 @@ function editDepartment(){
 
 function deleteDepartment(){
     $('#deleteDepartmentModal').modal('show');
+    $('#smallScreenOptionsModal').modal('hide');
     document.getElementById('deleteDepartmentConfirm').style.display = 'none'
     document.getElementById('deleteDepartment').style.display = 'block';
     document.getElementById('deleteDepMsg').textContent = ''
@@ -960,6 +959,7 @@ function deleteDepartment(){
 
 function editLocation(){
     $('#editLocationModal').modal('show');
+    $('#smallScreenOptionsModal').modal('hide');
     $('.close').on('click', function(){
         $('#editLocationModal').modal('hide');
         $('#editLocationConfirm').off('click');
@@ -1006,7 +1006,7 @@ function editLocation(){
                        // $('#editLocationModal').modal('hide');
                         locationSelect.innerHTML="";
                         locationFill();
-
+                        getUsers();
                     },
                     error:function(err){
                         console.log(err);
@@ -1022,6 +1022,7 @@ function editLocation(){
 
 function deleteLocation(){
     $('#location-fill-for-delete').empty();
+    $('#smallScreenOptionsModal').modal('hide');
     $('#deleteLocationModal').modal('show');
     document.getElementById('deleteLocMsg').innerHTML = "";
     document.getElementById('deleteLocationForm').style.display = 'block';
