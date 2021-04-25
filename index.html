@@ -46,15 +46,23 @@
         <button id="new-employee-btn" onclick="addUser()">New Employee</button>
       </div>
       <div class="right-side-btn">
-        <button id="add-multiple-btn" ><i class="fas fa-angle-down"></i></button>
-          <div class="dropdown-add">
-            <a href="#" onclick="addUser()">Add Employee</a>
-            <a href="#" onclick="addDepartment()">Add Department</a>
-            <a href="#" onclick="addLocation()">Add Location</a>
-          </div>
-        </div>
+        <i class="fas fa-angle-down"></i>
+      </div>
     </div>
-    <div>
+    <div class="dropdown-add">
+      <div class="dropdown-btns">
+      <div class="dropdowns" id="add-user-dropdown">
+      <a href="#" onclick="addUser()">Add Employee</a>
+      </div>
+      <div class="dropdowns"  id="add-department-dropdown">
+      <a href="#" onclick="addDepartment()">Add Department</a>
+    </div>
+    <div class="dropdowns" id="add-location-dropdown">
+      <a href="#" onclick="addLocation()">Add Location</a>
+    </div>
+    </div>
+  </div>
+    
       <div class="database-manipulation">
         <h4>Display</h4>
         <div class="location-div">
@@ -107,19 +115,19 @@
                 <option value="DESC">Desc</option>
               </select>
           </div>
-          <div>
-            <button class="button" id='orderBy'>Search</button>
-            <button class="button" id="defaultSearch" onclick="justOrderBy()">Search</button>
+          <div class="btn-display">
+            <button class="button btn btn-primary" id='orderBy'>Search</button>
+            <button class="button btn btn-primary" id="defaultSearch" onclick="justOrderBy()">Search</button>
           </div>
         </div>
-      </div>
+      
     </div>
   </div>
   <div class="right-side-body">
     <div class="right-side-top">
       <h4>Employees</h4>
       
-      <input type="text" placeholder="Search" id="searchBar">
+      <input type="text" class='form-control' placeholder="Search" id="searchBar">
     </div>
     <div class="table-container">
     <div class="tableUsers">
@@ -496,7 +504,7 @@
             </div>
             <div class="modal-body">
              <form id="department-delete-form">
-              <label for="deleteDepartmentLocationModal">Department Name:</label>
+              <label for="deleteDepartmentLocationModal">Department Name:</label><br>
               <select id="department-fill-for-delete">
                
               </select> 
