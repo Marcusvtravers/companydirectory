@@ -1,4 +1,6 @@
 $('.fa-bars').on('click', function(){
+    locationFillForModal();
+    departmentFillForModal();
     $('#smallScreenOptionsModal').modal('show');
     $('.close, #orderBy, #defaultSearch').on('click', function(){
         $('#smallScreenOptionsModal').modal('hide'); 
@@ -17,7 +19,7 @@ $('.dropdown-add').mouseleave(function(){
     $('.dropdown-add').slideUp('slow');
 })
 
-
+document.getElementById('department-fill').style.display = 'none';
 
 
 // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
@@ -241,9 +243,10 @@ function addDepartment(){
                 depLocation: locName.val()
             },
             success:function(res){
+                console.log(res)
                 depName.value == '';
                 locName.value == ''; 
-                console.log(res)
+                
                 let completeText = `The new department ${depName.value} has been successfully added.`;
                 document.getElementById('addDepartmentConfirmMessage').textContent = completeText;
                 document.getElementById('addDepartment').style.display = 'none';
@@ -438,6 +441,7 @@ function updateUser(id){
                     email: emailVal.val()
                 },
                 success:function(res){
+                    console.log(res)
                     const text = `The user ${firstNameVal.val()} ${lastNameVal.val()} was successfully updated.` 
                     document.getElementById('userUpdateDiv').style.display = 'none';
                     document.getElementById('successMsg').textContent = text;
@@ -466,20 +470,17 @@ function updateUser(id){
 
 function departmentFill(){
 
-
 $.ajax({
     url: 'libs/php/departmentFill.php',
     dataType: 'JSON',
     type: 'POST',
     success:function(res){
+        console.log(res)
         document.getElementById('department-first').style.display = 'block';
         document.getElementById('department-fill').style.display = 'none';
         document.getElementById('defaultSearch').style.display = 'block';
         document.getElementById('orderBy').style.display = 'none';
-        document.getElementById('department-first-modal').style.display = 'block';
-        document.getElementById('department-fill-modal').style.display = 'none';
-        document.getElementById('defaultSearch-modal').style.display = 'block';
-        document.getElementById('orderBy-modal').style.display = 'none';
+
         let newVal = '<option value="">All</option>';
         $('#department-first').html(newVal);
         var departmentSelect = document.getElementById('department-first');
@@ -493,19 +494,6 @@ $.ajax({
             departmentSelect.appendChild(el);
             
             }
-            let newValModal = '<option value="">All</option>';
-            $('#department-first-modal').html(newValModal);
-            var departmentSelect = document.getElementById('department-first-modal');
-            for(let i = 0; i < res.data.length; i++){
-                let depName = res.data[i].name;
-                let id = res.data[i].id;
-                let locationId = res.data[i].locationId;
-                let el = document.createElement('option');
-                el.textContent = depName;
-                el.value = id;
-                departmentSelect.appendChild(el);
-                
-                }
 
 
 
@@ -517,24 +505,12 @@ $.ajax({
                 document.getElementById('defaultSearch').style.display = 'none';
                 document.getElementById('orderBy').style.display = 'block';
                 $('#orderBy').on('click', function(){
-                
+                    
                 searchDisplay(departmentSelect.value,"", orderBy.value, direction.value)
                 })
                 
             })
-            let orderByModal = document.getElementById('order-by-select-modal');
-            let directionModal = document.getElementById('order-by-direction-modal');
-            $('#department-first-modal').change(function(){
-                $(this).off('change');
-                $('#department-first').off('change')
-                document.getElementById('defaultSearch-modal').style.display = 'none';
-                document.getElementById('orderBy-modal').style.display = 'block';
-                $('#orderBy-modal').on('click', function(){
-                
-                searchDisplay(departmentSelect.value,"", orderByModal.value, directionModal.value)
-                })
-                
-            })
+
  
             
         },
@@ -550,9 +526,16 @@ function justOrderBy(){
     let locId = '';
     let depId = '';
     searchDisplay(locId, depId, order, direction)
-    
+    $('#smallScreenOptionsModal').modal('hide');
 }
-
+function justOrderByModal(){
+    let order = document.getElementById('order-by-select-modal').value;
+    let direction = document.getElementById('order-by-direction-modal').value;
+    let locId = '';
+    let depId = '';
+    searchDisplay(locId, depId, order, direction)
+    $('#smallScreenOptionsModal').modal('hide');
+}
 
 
 function locationFill(){
@@ -562,11 +545,11 @@ function locationFill(){
         dataType: 'JSON',
         type: 'POST',
         success:function(res){
-          
+          console.log(res)
             document.getElementById('defaultSearch').style.display = 'block';
             document.getElementById('orderBy').style.display = 'none';
-            document.getElementById('defaultSearch-modal').style.display = 'block';
-            document.getElementById('orderBy-modal').style.display = 'none';
+
+            //fullscreen
 
             let newVal = '<option value="">All</option>';
             $('#location-fill').html(newVal);
@@ -580,37 +563,23 @@ function locationFill(){
                 locationSelect.appendChild(el);
 
             } 
-            let newValModal = '<option value="">All</option>';
-            $('#location-fill-modal').html(newValModal);
-            var locationSelectModal = document.getElementById('location-fill-modal');
-            for(let i = 0; i < res.data.length; i++){
-                let depName = res.data[i].name;
-                let id = res.data[i].id;
-                let el = document.createElement('option');
-                el.textContent = depName;
-                el.value = id;
-                locationSelectModal.appendChild(el);
-
-            } 
-            
-
             $('#location-fill').change(function(){
-                $('#location-fill-modal').off('change')
+                console.log($('#location-fill').val())
+              
                 document.getElementById('defaultSearch').style.display = 'none';
                 document.getElementById('orderBy').style.display = 'block';
-                departmentForOrder(locationSelect.value)
                 
+                if ($('#location-fill').val() == ''){
+                    document.getElementById('defaultSearch').style.display = 'block';
+                    document.getElementById('orderBy').style.display = 'none';
+                    departmentFill();
+                  
+                } else {
+                    document.getElementById('defaultSearch').style.display = 'none';
+                    document.getElementById('orderBy').style.display = 'block';
+                    departmentForOrder(locationSelect.value)
+                }  
             })
-            $('#location-fill-modal').change(function(){
-                $('#location-fill').off('change')
-                console.log('yes')
-                document.getElementById('defaultSearch-modal').style.display = 'none';
-                document.getElementById('orderBy-modal').style.display = 'block';
-                departmentForOrder(locationSelectModal.value)
-                
-                
-            })
-            
         },
             error:function(err){
                 console.log(err);
@@ -621,6 +590,8 @@ function locationFill(){
 
 
 function departmentForOrder(id){
+    $('#orderBy').off('click')
+    $('#orderBy-modal').off('click')
     let orderBy = document.getElementById('order-by-select');
     let direction = document.getElementById('order-by-direction');
     let orderByModal = document.getElementById('order-by-select-modal');
@@ -648,12 +619,15 @@ function departmentForOrder(id){
                 departmentSelect.appendChild(el);
             }
             $('#orderBy').on('click', function(){ 
+                console.log('start')
+
                 $('#orderBy-modal').off('click');
                 searchDisplay(departmentSelect.value, id, orderBy.value, direction.value)
-                console.log(departmentSelect.value);
-                console.log(orderBy.value);
-                console.log(direction.value);         
+               
             })
+
+
+
             document.getElementById('department-first-modal').style.display = 'none';
             document.getElementById('department-fill-modal').style.display = 'block';
             let newValModal = '<option value="">All</option>';
@@ -668,11 +642,8 @@ function departmentForOrder(id){
                 departmentSelectModal.appendChild(el);
             }
             $('#orderBy-modal').on('click', function(){ 
-                $('#orderBy').off('click');
-                searchDisplay(departmentSelectModal.value, id, orderByModal.value, directionModal.value)
-                console.log(departmentSelectModal.value);
-                console.log(orderByModal.value);
-                console.log(directionModal.value);  
+        
+                searchDisplay(departmentSelectModal.value, id, orderByModal.value, directionModal.value) 
                 $('#smallScreenOptionsModal').modal('hide');       
             })
             
@@ -683,12 +654,12 @@ function departmentForOrder(id){
 
 
 function searchDisplay(departmentSelect, locationId, orderBySelect, directionValue){
-    console.log('working')
+    console.log('search-display function')
     console.log(departmentSelect)
     console.log(locationId)
     console.log(orderBySelect)
     console.log(directionValue)
-    console.log(departmentSelect);
+
         $.ajax({
             url:'libs/php/orderBy.php',
             dataType: 'JSON',
@@ -718,9 +689,8 @@ function searchDisplay(departmentSelect, locationId, orderBySelect, directionVal
               </div>
               <div class="personnel-info">
                   <table class="personnel-info-table">
-                  <tr><td>${department}</td></tr>
-                  <tr><td>${location}</td></tr>
                   <tr><td>${email}</td></tr>
+                  <tr><td>${department} - ${location}</td></tr>
                   </table>
               </div>
                   
@@ -747,6 +717,95 @@ function searchDisplay(departmentSelect, locationId, orderBySelect, directionVal
             }
         })    
     
+}
+
+function departmentFillForModal(){
+    console.log('department for modal opened');
+    $.ajax({
+        url: 'libs/php/departmentFill.php',
+        dataType: 'JSON',
+        type: 'POST',
+        success:function(res){
+            document.getElementById('department-first-modal').style.display = 'block';
+            document.getElementById('department-fill-modal').style.display = 'none';
+            document.getElementById('defaultSearch-modal').style.display = 'block';
+            document.getElementById('orderBy-modal').style.display = 'none';
+
+            let newValModal = '<option value="">All</option>';
+            $('#department-first-modal').html(newValModal);
+            var departmentSelectModal = document.getElementById('department-first-modal');
+            for(let i = 0; i < res.data.length; i++){
+                let depName = res.data[i].name;
+                let id = res.data[i].id;
+                let locationId = res.data[i].locationId;
+                let el = document.createElement('option');
+                el.textContent = depName;
+                el.value = id;
+                departmentSelectModal.appendChild(el);
+                
+                }
+                let orderByModal = document.getElementById('order-by-select-modal');
+                let directionModal = document.getElementById('order-by-direction-modal');
+                $('#department-first-modal').change(function(){
+                    $(this).off('change');
+                    $('#department-first').off('change')
+                    document.getElementById('defaultSearch-modal').style.display = 'none';
+                    document.getElementById('orderBy-modal').style.display = 'block';
+                    $('#orderBy-modal').on('click', function(){
+                    $('#smallScreenOptionsModal').modal('hide');    
+                    searchDisplay(departmentSelectModal.value,"", orderByModal.value, directionModal.value)
+                    })
+                    
+                })
+            
+        },
+        error:function(res){
+            console.log(res)
+        }
+    })
+}
+
+function locationFillForModal(){
+
+    $.ajax({
+        url: 'libs/php/locationFill.php',
+        dataType: 'JSON',
+        type: 'POST',
+        success:function(res){
+            document.getElementById('defaultSearch-modal').style.display = 'block';
+            document.getElementById('orderBy-modal').style.display = 'none';
+
+            let newValModal = '<option value="">All</option>';
+            $('#location-fill-modal').html(newValModal);
+            var locationSelectModal = document.getElementById('location-fill-modal');
+            for(let i = 0; i < res.data.length; i++){
+                let depName = res.data[i].name;
+                let id = res.data[i].id;
+                let el = document.createElement('option');
+                el.textContent = depName;
+                el.value = id;
+                locationSelectModal.appendChild(el);
+
+            } 
+            
+            $('#location-fill-modal').change(function(){
+                
+                
+                if($('#location-fill-modal').val() == ''){
+                    document.getElementById('defaultSearch-modal').style.display = 'block';
+                    document.getElementById('orderBy-modal').style.display = 'none';
+                    departmentFill();
+                } else {
+                    document.getElementById('defaultSearch-modal').style.display = 'none';
+                    document.getElementById('orderBy-modal').style.display = 'block';
+                    departmentForOrder(locationSelectModal.value)
+                }
+            })
+        }, 
+        error:function(err){
+            console.log(err)
+        }
+    })
 }
 
 
@@ -784,7 +843,6 @@ function searchBarDisplay(){
                   <table class="personnel-info-table">
                   <tr><td>${email}</td></tr>
                   <tr><td>${department} - ${location}</td></tr>
-                 
                   </table>
               </div>
                   
@@ -815,312 +873,392 @@ searchBar.addEventListener('keyup', searchBarDisplay);
 
 
 
-function editDepartment(){  
+function getValueForEditDepartment(){
+let depFirst = document.getElementById('department-first');
+let depFill = document.getElementById('department-fill');
+console.log(depFirst.value);
+console.log(depFill.value);
+
+
+if (depFirst.value !== '' && depFill.value === ''){
+    let text = $('#department-first>option:selected').text();
+    editDepartment(`This is from dep first`,depFirst.value, text)
+    depFirst.value = '';
+    depFill.value = '';
+} else {
+    let text = $('#department-fill>option:selected').text();
+    editDepartment(`This is from dep fill`, depFill.value, text)
+    depFirst.value = '';
+    depFill.value = '';
+}
+}
+
+function getValueForEditDepartmentModal(){
+    let depFirst = document.getElementById('department-first-modal');
+let depFill = document.getElementById('department-fill-modal');
+console.log(depFirst.value);
+console.log(depFill.value);
+
+
+if (depFirst.value !== '' && depFill.value === ''){
+    let text = $('#department-first-modal>option:selected').text();
+    editDepartment(`This is from dep first`,depFirst.value, text)
+    depFirst.value = '';
+    depFill.value = '';
+} else {
+    let text = $('#department-fill-modal>option:selected').text();
+    editDepartment(`This is from dep fill`, depFill.value, text)
+    depFirst.value = '';
+    depFill.value = '';
+}
+}
+
+function editDepartment(msg,value, depName){
+    document.getElementById('editDepartmentConfirm').style.display = "block";
+    document.getElementById('editDepSuccessMsg').style.display = 'none';
+    document.getElementById('editDepartmentName').value = '';
+    console.log(msg)
+    console.log(depName)
     $('#editDepartmentModal').modal('show');
     $('#smallScreenOptionsModal').modal('hide');
-    $('#department-fill-for-edit').empty();
-    document.getElementById('editDepartmentName').value = "";
-    document.getElementById('editDepSuccessMsg').textContent = "";
-    document.getElementById('editDepartmentConfirm').style.display = "block";
-    document.getElementById('editDepartmentForm').style.display = 'block';
+   
     $('.close').on('click', function(){
         $('#editDepartmentModal').modal('hide');
         $('#editDepartmentConfirm').off('click');
     })
+    if (value === ''){
+        console.log(true)
+        document.getElementById('selectDepartmentToEditMsg').style.display = 'block';
+        document.getElementById('msgForEditingDepartment').style.display = 'none';
+    } else{
+        console.log(false)
+        document.getElementById('selectDepartmentToEditMsg').style.display = 'none';
+        document.getElementById('msgForEditingDepartment').style.display = 'block';
+        document.getElementById('oldDepName').innerHTML = depName
+        
+        let newDepName = document.getElementById('editDepartmentName');
+        $('#editDepartmentConfirm').on('click', function(){
 
-    $.ajax({
-        url: 'libs/php/departmentFill.php',
-        dataType: 'JSON',
-        type: 'POST',
-        success:function(res){
-            console.log(res)
-            var departmentSelect = document.getElementById('department-fill-for-edit');
-            for(let i = 0; i < res.data.length; i++){
-                let depName = res.data[i].name;
-                let id = res.data[i].id;
-                let el = document.createElement('option');
-                el.textContent = depName;
-                el.value = id;
-                departmentSelect.appendChild(el);
-                
-            }
-            $('#editDepartmentConfirm').on('click', function(){
-                
-                const newDep = document.getElementById('editDepartmentName');
-               
-               
-                $.ajax({
-                    url: 'libs/php/editDepartment.php',
-                    dataType: 'JSON',
-                    type: 'POST',
-                    data:{
-                        id: departmentSelect.value,
-                        newDep: newDep.value
-                    },
-                    success:function(res){
-                        departmentSelect.innerHTML="";
-                        document.getElementById('editDepartmentForm').style.display = 'none';
-                        document.getElementById('editDepSuccessMsg').style.display = 'block';
-                        document.getElementById('editDepSuccessMsg').innerHTML = "Department Successfully Updated";
-                        document.getElementById('editDepartmentConfirm').style.display = "none";
-                        departmentFill();
-                        $('.tableUsers').empty();
-                        getUsers();
+        
+            $.ajax({
+                url: 'libs/php/editDepartment.php',
+                dataType: 'JSON',
+                type: 'POST',
+                data:{
+                    id: value,
+                    newDep: newDepName.value
                 },
-                    error:function(err){
-                        console.log(err);
-                    }
-                
-                }) 
+                success:function(res){
+                    
+                    document.getElementById('msgForEditingDepartment').style.display = 'none';
+                    document.getElementById('editDepSuccessMsg').style.display = 'block';
+                    document.getElementById('editDepSuccessMsg').innerHTML = `${depName} has successfully updated to ${newDepName.value}`;
+                    document.getElementById('editDepartmentConfirm').style.display = "none";
+                    departmentFill();
+                    $('.tableUsers').empty();
+                    getUsers();
+            },
+                error:function(err){
+                    console.log(err);
+                }
             
-            })
-            
-
-            }
-            })
+            }) 
+        })
+    }
 }
 
-function deleteDepartment(){
+
+function getValueForDeleteDepartment(){
+
+    let depFirst = document.getElementById('department-first');
+    let depFill = document.getElementById('department-fill');
+    console.log(depFirst.value);
+    console.log(depFill.value);
+    
+    
+    if (depFirst.value !== '' && depFill.value === ''){
+        let text = $('#department-first>option:selected').text();
+        deleteDepartment(`This is from dep first`,depFirst.value, text)
+        depFirst.value = '';
+        depFill.value = '';
+    } else {
+        let text = $('#department-fill>option:selected').text();
+        deleteDepartment(`This is from dep fill`, depFill.value, text)
+        depFirst.value = '';
+        depFill.value = '';
+    }
+    
+    }
+
+function getValueForDeleteDepartmentModal(){
+    let depFirst = document.getElementById('department-first-modal');
+    let depFill = document.getElementById('department-fill-modal');
+    console.log(depFirst.value);
+    console.log(depFill.value);
+    
+    
+    if (depFirst.value !== '' && depFill.value === ''){
+        let text = $('#department-first-modal>option:selected').text();
+        deleteDepartment(`This is from dep first`,depFirst.value, text)
+        depFirst.value = '';
+        depFill.value = '';
+    } else {
+        let text = $('#department-fill-modal>option:selected').text();
+        deleteDepartment(`This is from dep fill`, depFill.value, text)
+        depFirst.value = '';
+        depFill.value = '';
+    }
+    
+}    
+
+function deleteDepartment(msg, value, depName){
+    console.log(msg, value, depName)
     $('#deleteDepartmentModal').modal('show');
     $('#smallScreenOptionsModal').modal('hide');
-    document.getElementById('deleteDepartmentConfirm').style.display = 'none'
-    document.getElementById('deleteDepartment').style.display = 'block';
-    document.getElementById('deleteDepMsg').textContent = ''
-    document.getElementById('deleteConfirmMsg').innerHTML = '';
-    document.getElementById('department-delete-form').style.display = 'block'
-
-    $('#department-fill-for-delete').empty();
     $('.close').on('click', function(){
         $('#deleteDepartmentModal').modal('hide');
-        $('#deleteDepartment').off('click');
         $('#deleteDepartmentConfirm').off('click');
     })
-    $.ajax({
-        url:'libs/php/departmentFill.php',
-        dataType: 'JSON',
-        type: 'POST',
-        success:function(res){
-            $('departmentSelect').empty();
-            var departmentSelect = document.getElementById('department-fill-for-delete');
-            for(let i = 0; i < res.data.length; i++){
-                let depName = res.data[i].name;
-                let id = res.data[i].id;
-                let el = document.createElement('option');
-                el.textContent = depName;
-                el.value = id;
-                departmentSelect.appendChild(el);
-            }
-            console.log(res)
+    document.getElementById('selectDepartmentToDeleteMsg').style.display = 'none';
+    document.getElementById('deleteSuccessMsg').style.display = 'none';
+    document.getElementById('deleteConfirmMsg').style.display = 'none';
+    if(value === ''){
+        document.getElementById('selectDepartmentToDeleteMsg').style.display = 'block';
+        document.getElementById('deleteDepartmentConfirm').style.display = 'none';
+    } else {
+        document.getElementById('deleteConfirmMsg').style.display = 'block';
+        document.getElementById('deleteDepartmentConfirm').style.display = 'block';
+        document.getElementById('deleteDepName').innerHTML = depName
+        $('#deleteDepartmentConfirm').one('click', function(){
 
-            $('#deleteDepartment').on('click', function(){
-             console.log(departmentSelect.value)
-                    $.ajax({
-                        url:'libs/php/getDepartment.php',
-                        dataType: 'JSON',
-                        type: 'POST',
-                        data:{
-                            id: departmentSelect.value
-                        },
-                        success:function(res){
-                        console.log(res) 
-                            let deleteDep = res.data.department[0].name
-                            document.getElementById('department-delete-form').style.display = 'none';
-                            document.getElementById('deleteDepMsg').style.display = 'block';
-                            let msg = `Are you sure you would like to delete ${deleteDep} from the database?`
-                            document.getElementById('deleteDepMsg').textContent = msg;
-                            document.getElementById('deleteDepartment').style.display = 'none';
-                            document.getElementById('deleteDepartmentConfirm').style.display = 'block'
+            $.ajax({
+                url: 'libs/php/deleteDepartment.php',
+                dataType: 'JSON',
+                type: 'POST',
+                data:{
+                    id: value
+                },
+                success:function(res){
+                    console.log(res)
+                    document.getElementById('deleteConfirmMsg').style.display = 'none';
+                    document.getElementById('deleteDepartmentConfirm').style.display = 'none';
+                    document.getElementById('deleteSuccessMsg').innerHTML = res.data.message;
+                    document.getElementById('deleteSuccessMsg').style.display = 'block';
+                    document.getElementById('deleteDepartmentConfirm').style.display = 'none';
+                    departmentFill();
+                },
+                error:function(err){
+                    console.log(err)
+                }
+            })
+        })
+    }
 
-                        $('#deleteDepartmentConfirm').on('click', function(){
-
-                            
-                            $.ajax({
-                               url: 'libs/php/deleteDepartment.php',
-                               dataType: 'JSON',
-                               type: 'POST',
-                               data: {
-                                id: departmentSelect.value
-                               },
-                               success:function(res){
-                                
-                                       console.log(res)
-                                       while(departmentSelect.firstChild){
-                                        departmentSelect.removeChild(departmentSelect.firstChild)
-                                    }
-                                       document.getElementById('deleteConfirmMsg').style.display = 'block';
-                                       document.getElementById('deleteDepMsg').style.display = 'none';
-                                       let text = res.data.message;
-                                       document.getElementById('deleteConfirmMsg').innerHTML = text;
-                                       document.getElementById('deleteDepartmentConfirm').style.display = 'none';
-                                       departmentFill();
-                                },
-                               error:function(res){
-                                   console.log(res)
-                               } 
-                            })
-
-                            
-                        })
-
-                    },
-                    error:function(err){
-                        console.log(err)
-                    }
-                })
-            }) 
-           
-        },
-        error:function(err){
-            console.log(err);
-        }
-    })
 }
 
+
+
+
 function editLocation(){
-    $('#editLocationModal').modal('show');
+
+    document.getElementById('editLocationSuccessMsg').style.display = 'none';
+    document.getElementById('editLocationConfirm').style.display = 'block';
     $('#smallScreenOptionsModal').modal('hide');
+    let doc = document.getElementById('editLocationName').value = '';
+    let locationSelect = document.getElementById('location-fill')
+    let locationSelectModal = document.getElementById('location-fill-modal');
+    document.getElementById('selectLocationToEditMsg').style.display = 'none';
     $('.close').on('click', function(){
         $('#editLocationModal').modal('hide');
         $('#editLocationConfirm').off('click');
+        locationSelect.value = '';
+        locationSelectModal.value = '';
     })
-    document.getElementById('editLocationName').value = '';
-    document.getElementById('editLocationSuccessMsg').style.display = 'none';
-    document.getElementById('editLocationForm').style.display = 'block';
-    document.getElementById('editLocationConfirm').style.display = 'block';
-    $('#location-fill-for-edit').empty();
-    $.ajax({
-        url: 'libs/php/locationFill.php',
-        dataType: 'JSON',
-        type: 'POST',
-        success:function(res){
-            console.log(res)
-            var locationSelect = document.getElementById('location-fill-for-edit');
-            for(let i = 0; i < res.data.length; i++){
-                let locName = res.data[i].name;
-                let id = res.data[i].id;
-                let el = document.createElement('option');
-                el.textContent = locName;
-                el.value = id;
-                locationSelect.appendChild(el);
-            }
+    $('#editLocationModal').modal('show');
 
-            $('#editLocationConfirm').one('click', function(){
-                let editLoc = document.getElementById('editLocationName');
-                console.log('Working')
-                $.ajax({
-                    url: 'libs/php/editLocation.php',
-                    dataType: 'JSON',
-                    type: 'POST',
-                    data: {
-                        newLoc: editLoc.value,
-                        id: locationSelect.value
-                    },
-                    success:function(res){
-                        console.log(res);
-                        document.getElementById('editLocationForm').style.display = 'none';
-                        document.getElementById('editLocationConfirm').style.display = 'none'
-                        document.getElementById('editLocationSuccessMsg').style.display = 'block';
-                        let text = `Location successfully changed.`
-                        document.getElementById('editLocationSuccessMsg').innerHTML = text;
-                       // $('#editLocationModal').modal('hide');
-                        locationSelect.innerHTML="";
-                        locationFill();
-                        getUsers();
-                    },
-                    error:function(err){
-                        console.log(err);
-                    }
-                })
-            })
-        },
-        error:function(err){
-            console.log(err)
-        }
-    })
+    console.log(locationSelect.value)
+    console.log(locationSelectModal.value)
+    if (locationSelect.value == "" && locationSelectModal.value == ''){
+        document.getElementById('edit-location-div').style.display = 'none';
+        document.getElementById('selectLocationToEditMsg').style.display = 'block';
+        document.getElementById('editLocationConfirm').style.display = 'none';
+    } else if (locationSelect.value == '' && locationSelectModal.value != ''){
+        console.log('hello');
+        $('.close').on('click', function(){
+            $('#editLocationModal').modal('hide');
+            $('#editLocationConfirm').off('click');
+            
+            locationSelectModal.value = '';
+        })
+        let text = $('#location-fill-modal>option:selected').text();
+        document.getElementById('edit-location-name').innerHTML = text;
+
+        document.getElementById('edit-location-div').style.display = 'block';
+        let editLoc = document.getElementById('editLocationName')
+        $('#editLocationConfirm').one('click', function(){
+            $.ajax({
+                url: 'libs/php/editLocation.php',
+                dataType: 'JSON',
+                type: 'POST',
+                data: {
+                    newLoc: editLoc.value,
+                    id: locationSelectModal.value
+                },
+                success:function(res){
+                    console.log(res);
+                    
+                    document.getElementById('edit-location-div').style.display = 'none';
+                
+                    document.getElementById('editLocationSuccessMsg').style.display = 'block';
+                    document.getElementById('editLocationConfirm').style.display = 'none';
+                    let successtext = `${text} has been successfully changed to ${editLoc.value}.`
+                    document.getElementById('editLocationSuccessMsg').innerHTML = successtext;
+                   // $('#editLocationModal').modal('hide');
+                   
+                    
+                    locationFill();
+                    getUsers();
+                },
+                error:function(err){
+                    console.log(err);
+                }
+            })     
+        })
+    } else {
+        let text = $('#location-fill>option:selected').text();
+        document.getElementById('edit-location-name').innerHTML = text;
+        document.getElementById('edit-location-div').style.display = 'block';
+        let editLoc = document.getElementById('editLocationName')
+        $('#editLocationConfirm').one('click', function(){
+            $.ajax({
+                url: 'libs/php/editLocation.php',
+                dataType: 'JSON',
+                type: 'POST',
+                data: {
+                    newLoc: editLoc.value,
+                    id: locationSelect.value
+                },
+                success:function(res){
+                    console.log(res);
+                    
+                    document.getElementById('edit-location-div').style.display = 'none';
+                
+                    document.getElementById('editLocationSuccessMsg').style.display = 'block';
+                    document.getElementById('editLocationConfirm').style.display = 'none';
+                    let successtext = `${text} has been successfully changed to ${editLoc.value}.`
+                    document.getElementById('editLocationSuccessMsg').innerHTML = successtext;
+                   // $('#editLocationModal').modal('hide');
+                   
+                    
+                    locationFill();
+                    getUsers();
+                },
+                error:function(err){
+                    console.log(err);
+                }
+            })     
+        })
+
+    }
+
 }
 
 function deleteLocation(){
-    $('#location-fill-for-delete').empty();
+
+
     $('#smallScreenOptionsModal').modal('hide');
     $('#deleteLocationModal').modal('show');
-    document.getElementById('deleteLocMsg').innerHTML = "";
-    document.getElementById('deleteLocationForm').style.display = 'block';
-    document.getElementById('deleteLocConfirmMsg').innerHTML = '';
-    document.getElementById('deleteLocationConfirm').style.display = 'none';
-    document.getElementById('deleteLocation').style.display = 'block';
     $('.close').on('click', function(){
         $('#deleteLocationModal').modal('hide');
-        $('#deleteLocation').off('click');
         $('#deleteLocationConfirm').off('click');
     })
-    $.ajax({
-        url: 'libs/php/locationFill.php',
-        dataType: 'JSON',
-        type: 'POST',
-        success:function(res){
-            console.log(res);
-            let locationSelect = document.getElementById('location-fill-for-delete');
-            for(let i = 0; i < res.data.length; i++){
-                let locName = res.data[i].name;
-                let id = res.data[i].id;
-                let el = document.createElement('option');
-                el.textContent = locName;
-                el.value = id;
-                locationSelect.appendChild(el);
-            }
-            $('#deleteLocation').on('click', function(){       
-                $.ajax({
-                    url: 'libs/php/getLocation.php',
-                    dataType:'JSON',
-                    type: 'POST',
-                    data:{
-                        id: locationSelect.value
-                    },
-                    success:function(res){
-                        let locName = res.data.department[0].name;
-                        let text = `Are you sure you want to delete ${locName} from the database?`
-                        document.getElementById('deleteLocationForm').style.display = 'none';
-                        document.getElementById('deleteLocation').style.display = 'none';
-                        document.getElementById('deleteLocMsg').style.display = 'block';
-                        document.getElementById('deleteLocMsg').innerHTML = text;
-                        document.getElementById('deleteLocationConfirm').style.display = 'block';
-                    }
-                })
-            })
+    document.getElementById('deleteLocConfirmMsg').style.display = 'none';
+    document.getElementById('deleteLocationConfirm').style.display = 'block';
+    let deleteLocMsg = document.getElementById('deleteLocMsg');
+    let selectLocationToDeleteMsg = document.getElementById('selectLocationToDeleteMsg');
 
+  
+    deleteLocMsg.style.display = 'none';
+    selectLocationToDeleteMsg.style.display = 'none';
+
+    let deleteLocId = document.getElementById('location-fill')
+    let deleteLocIdModal = document.getElementById('location-fill-modal')
+    let text = $('#location-fill>option:selected').text();
+    let confirmMsg = `Are you sure you would like to delete ${text} from the directory?`
+    deleteLocMsg.innerHTML = confirmMsg;
+
+    if (deleteLocId.value == "" && deleteLocIdModal.value == ''){
+        deleteLocMsg.style.display = 'none';
+        selectLocationToDeleteMsg.style.display = 'block';
+        document.getElementById('deleteLocationConfirm').style.display = 'none';  
+    } else if(deleteLocId.value == "" && deleteLocIdModal.value != ""){
+        let textModal = $('#location-fill-modal>option:selected').text();
+        let confirmMsgModal = `Are you sure you would like to delete ${textModal} from the directory?`
+        console.log(confirmMsgModal)
+        document.getElementById('deleteLocMsg').innerHTML = confirmMsgModal;
+        deleteLocMsg.style.display = 'block';
+        $('#deleteLocationConfirm').one('click', function(){
             
-            $('#deleteLocationConfirm').on('click', function(){
+            $.ajax({
+                url: 'libs/php/deleteLocation.php',
+                dataType: 'JSON',
+                type: 'POST',
+                data: {
+                    id: deleteLocIdModal.value
+                },
+                success:function(res){
+                    console.log(res);
+                    let txt = res.data.message
+                    document.getElementById('deleteLocMsg').style.display = 'none';
+                    document.getElementById('deleteLocationConfirm').style.display = 'none';
+                    document.getElementById('deleteLocConfirmMsg').style.display = 'block';
+                    
+                   
+                    document.getElementById('deleteLocConfirmMsg').innerHTML = txt;
+                   // $('#editLocationModal').modal('hide');
+                   
+                    
+                    locationFill();
+                    getUsers();
+                },
+                error:function(err){
+                    console.log(err);
+                }
+            }) 
+        })
+   
+    } else {
+        deleteLocMsg.style.display = 'block';
+        $('#deleteLocationConfirm').one('click', function(){
+            $.ajax({
+                url: 'libs/php/deleteLocation.php',
+                dataType: 'JSON',
+                type: 'POST',
+                data: {
+                    id: deleteLocId.value
+                },
+                success:function(res){
+                    console.log(res);
+                    let txt = res.data.message
+                    document.getElementById('deleteLocMsg').style.display = 'none';
+                    document.getElementById('deleteLocationConfirm').style.display = 'none';
+                    document.getElementById('deleteLocConfirmMsg').style.display = 'block';
+                    
+                   
+                    document.getElementById('deleteLocConfirmMsg').innerHTML = txt;
+                   // $('#editLocationModal').modal('hide');
+                   
+                    
+                    locationFill();
+                    getUsers();
+                },
+                error:function(err){
+                    console.log(err);
+                }
+            })     
+        })
+    }
 
-                $.ajax({
-                    url: 'libs/php/deleteLocation.php',
-                    dataType: 'JSON',
-                    type: 'POST',
-                    data:{
-                        id: locationSelect.value
-                    },
-                    success:function(res){
-                        console.log(res)
-                                while(locationSelect.firstChild){
-                                    locationSelect.removeChild(locationSelect.firstChild)
-                                }
-                            let text = res.data.message
-                            document.getElementById('deleteLocMsg').style.display = 'none';
-                            document.getElementById('deleteLocConfirmMsg').style.display = 'block';
-                            document.getElementById('deleteLocConfirmMsg').innerHTML = text;
-                             document.getElementById('deleteLocationConfirm').style.display = 'none';
-                             locationFill();
-                    },
-                    error:function(err){
-                        console.log(err)
-                    }
-                })
-
-            })
-        }, 
-        error:function(res){
-            console.log(res);
-        }
-    })
 }
 
 
@@ -1129,6 +1267,7 @@ getUsers();
 departmentFill();
 
 locationFill();
+
 
 
 

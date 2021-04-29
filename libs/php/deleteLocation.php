@@ -40,7 +40,7 @@
 
 	// first query
 
-	$query = 'SELECT * from department WHERE locationID =' . $_REQUEST['id'];
+	$query = 'SELECT COUNT(id) AS idCount from department WHERE locationID =' . $_REQUEST['id'];
 
 	$result = $conn->query($query);
 	
@@ -96,7 +96,7 @@
 
 	}
 	
-	if(count($personnel) > 0){
+	if($personnel[0]['idCount'] > 0){
 		$output['data']['personnel'] = $personnel;
 		$output['data']['message'] = 'Location could not be deleted because it contains departments.';
 	} else {

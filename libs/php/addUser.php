@@ -36,7 +36,7 @@ $email = $_POST['email'];
 $department = $_POST['department'];
 
 
-$sqldep = "SELECT * from department WHERE id = '$department'";
+$sqldep = "SELECT id from department WHERE id = '$department'";
 $result2 = $conn->query($sqldep);
 
 $arr=[];

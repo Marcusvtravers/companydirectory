@@ -34,7 +34,7 @@
 
 	// first query
 
-	$query = 'SELECT * from personnel WHERE id =' . $_REQUEST['id'];
+	$query = 'SELECT firstName, id, lastName, departmentID, email from personnel WHERE id =' . $_REQUEST['id'];
 
 	$result = $conn->query($query);
 	

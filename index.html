@@ -88,8 +88,8 @@
                 <span>Departments</span>
               </div>
             <div class="departments-crud">
-              <a href="#" onclick="editDepartment()">Edit</a>
-              <a href="#" onclick="deleteDepartment()">Delete</a>
+              <a href="#" onclick="getValueForEditDepartment()">Edit</a>
+              <a href="#" onclick="getValueForDeleteDepartment()">Delete</a>
             </div>
           </div>
         
@@ -148,7 +148,7 @@
 
         </button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body-small">
         <div class="database-manipulation-modal">
           
           <div class="location-div">
@@ -174,8 +174,8 @@
                   <span>Departments</span>
                 </div>
               <div class="departments-crud">
-                <a href="#" onclick="editDepartment()">Edit</a>
-                <a href="#" onclick="deleteDepartment()">Delete</a>
+                <a href="#" onclick="getValueForEditDepartmentModal()">Edit</a>
+                <a href="#" onclick="getValueForDeleteDepartmentModal()">Delete</a>
               </div>
             </div>
           
@@ -190,7 +190,7 @@
           
   
             <div class="order-by-div">
-              <div class="order-by-title">
+              <div class="departments-header-modal">
               <span>Order by</span></br>
             </div>
               <div class="order-by-selects">
@@ -212,7 +212,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary close" data-dismiss="modal">Close</button>
               <button type="button" class="button btn btn-primary" id='orderBy-modal'>Search</button>
-              <button type="button" class="button btn btn-primary" id="defaultSearch-modal" onclick="justOrderBy()">Search</button>
+              <button type="button" class="button btn btn-primary" id="defaultSearch-modal" onclick="justOrderByModal()">Search</button>
       </div>
     </div>
   </div>
@@ -230,24 +230,16 @@
           </button>
         </div>
         <div class="modal-body">
-         <form class="modal-forms" id="add-user-form">
-          <label for="firstName">First Name:</label><br>
-          <input type="text" id="firstName">
-          <br>
-          <label for="lastName">Last Name:</label><br>
-          <input type="text" id="lastName">
-          <br>
-          <label for="email">Email:</label><br>
-          <input type="text" id="email">  
-          <br>
+
+          <table class="table modal-tables">
+            <tr><td><label for="firstName">First Name</label></td><td><input type="text" id="firstName"></td></tr>
+            <tr><td><label for="lastName">Last Name</label></td><td><input type="text" id="lastName"></td></tr>
+            <tr><td><label for="email">Email</label></td><td><input type="text" id="email">  </td></tr>
+            <tr><td><label for="department">Department</label></td><td><select  id="department"></select></td></tr>
+          </table>
+       
         
-          <label for="department">Department:</label><br>
-          <select  id="department">
-            </select> 
-          <br>
-          
-        
-         </form>
+         
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary close" data-dismiss="modal">Close</button>
@@ -297,20 +289,17 @@
       </div>
       <div class="modal-body">
        
-       <form class="modal-forms" id="userUpdateDiv">
-         <label for="firstNameUpdateModal">First Name:</label><br>
-         <input type="text" id="firstNameUpdateModal">
-         <br>
-         <label for="lastNameUpdateModal">Last Name:</label><br>
-         <input type="text" id="lastNameUpdateModal">
-         <br>
-         <label for="emailUpdateModal"> Email:</label><br>
-         <input type="text" id="emailUpdateModal">
-         <br>
-         <label for="departmentUpdateModal">Department:</label><br>
-         <select id="departmentUpdateModal"></select>
-         <br>
-       </form>
+
+        <div id="userUpdateDiv">
+        <table class="table modal-tables" >
+          <tr><td><label for="firstNameUpdateModal">First Name</label></td><td><input type="text" id="firstNameUpdateModal"></td></tr>
+          <tr><td><label for="lastNameUpdateModal">Last Name</label></td><td><input type="text" id="lastNameUpdateModal"></td></tr>
+          <tr><td><label for="emailUpdateModal"> Email</label></td><td><input type="text" id="emailUpdateModal"></td></tr>
+          <tr><td><label for="departmentUpdateModal">Department</label></td><td><select id="departmentUpdateModal"></select></td></tr>
+        </table>
+        </div>
+
+
       
        <div id="successMsg">
 
@@ -337,14 +326,16 @@
           </button>
         </div>
         <div class="modal-body">
-         <form class="modal-forms">
-           <label for="addDepartmentNameModal">Department Name:</label>
-           <input type="text" id="addDepartmentNameModal">
-           <br>
-           <label for="addDepartmentLocationModal">Location Name:</label>
-           <select id="addDepartmentLocationModal"></select>
-           
-         </form>
+
+          <div>
+            <table class="table modal-tables" >
+              <tr><td><label for="addDepartmentNameModal">Department Name</label></td><td><input type="text" id="addDepartmentNameModal"></td></tr>
+              <tr><td><label for="addDepartmentLocationModal">Location Name</label></td><td><select id="addDepartmentLocationModal"></select></td></tr>
+
+            </table>
+            </div>
+
+   
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary close" data-dismiss="modal">Close</button>
@@ -392,12 +383,17 @@
             </button>
           </div>
           <div class="modal-body">
-           <form class="modal-forms">
+           
              
-             <label for="addDepartmentLocationModal">Location Name:</label>
-             <input type="text" id="addLoca">
+            <table class="table modal-tables" >
+              <tr><td><label for="addDepartmentLocationModal">Location Name</label></td><td><input type="text" id="addLoca"></td></tr>
+
+
+            </table>
+  
+      
              
-           </form>
+        
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary close" data-dismiss="modal">Close</button>
@@ -412,8 +408,8 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="addLocationModalLabel">Add Location</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
+            <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close">
+            
             </button>
           </div>
           <div class="modal-body">
@@ -470,16 +466,21 @@
             </button>
           </div>
           <div class="modal-body">
-           <form id="editDepartmentForm" class="modal-forms">
-            <label for="editDepartmentLocationModal">Department Name:</label><br>
-            <select id="department-fill-for-edit">
-             
-            </select> 
+          
+            <div id="msgForEditingDepartment">
+              <p>Please insert the new department name for <span id="oldDepName"></span></p>
+              <table class="table modal-tables" >
+                <tr><td><label for="editDepartmentLocationModal">New Department Name</label></td><td><input type="text" id="editDepartmentName"></td></tr>
+  
+  
+              </table>
+            </div>
 
-             <label for="editDepartmentLocationModal">New Department Name:</label><br>
-             <input type="text" id="editDepartmentName">
+            <div id="selectDepartmentToEditMsg">
+              <p>Please select a department you would like to delete from the display menu</p>
+            </div>
 
-           </form>
+      
            <div id="editDepSuccessMsg">
 
           </div>
@@ -503,19 +504,20 @@
               </button>
             </div>
             <div class="modal-body">
-             <form id="department-delete-form">
-              <label for="deleteDepartmentLocationModal">Department Name:</label><br>
-              <select id="department-fill-for-delete">
-               
-              </select> 
-              </form>
-              <div id="deleteDepMsg"></div>
-              <div id="deleteConfirmMsg"></div>
+            
+              
+              <div id="deleteConfirmMsg">
+                <p>Are you sure you would like to delete <span id="deleteDepName"></span> from the database?</span></p>
+              </div>
+              <div id="deleteSuccessMsg"></div>
+              <div id="selectDepartmentToDeleteMsg">
+                <p>Please select a department you would like to delete from the display menu</p>
+              </div>
 
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary close" data-dismiss="modal">Close</button>
-              <button type="button" id="deleteDepartment" class="btn btn-primary">Delete</button>
+
               <button type="button" id="deleteDepartmentConfirm" class="btn btn-primary">Confirm</button>
             </div>
           </div>
@@ -532,19 +534,21 @@
 
             </button>
           </div>
-          <div class="modal-body">
-           <form id="editLocationForm" class="modal-forms">
-            <label for="editLocationNameModal">Location Name:</label><br>
-            <select id="location-fill-for-edit">
-             
-            </select> 
-          </br>
-             <label for="editLocationNameModal">New Location Name:</label><br>
-             <input type="text" id="editLocationName">
-             
-           </form>
-           <div id="editLocationSuccessMsg"></div>
+          <div class="modal-body" >
+            <div id="edit-location-div">
+          <p>Please enter a new location name for <span id="edit-location-name"></span></p>
+          <table class="table modal-tables" >
+            <tr><td><label for="editLocationNameModal">New Location Name</label></td><td><input type="text" id="editLocationName"></td></tr>
+
+
+          </table>           
           </div>
+           <div id="editLocationSuccessMsg"></div>
+           <div id="selectLocationToEditMsg">
+            <p>Please select a location you would like to edit from the display menu</p>
+          </div>
+          </div>
+
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary close" data-dismiss="modal">Close</button>
             
@@ -565,19 +569,21 @@
                 </button>
               </div>
               <div class="modal-body">
-               <form id='deleteLocationForm' class="modal-forms">
-                <label for="deleteLocationLocationModal">Department Name:</label><br>
-                <select id="location-fill-for-delete">
-                 
-                </select> 
-                </form>
-                <div id="deleteLocMsg"></div>
+               
+      
+                <div id="deleteLocMsg">
+                  <p>Are you sure you would like to delete <span id="deleteLocName"></span> from the database?</p>
+                </div>
                 <div id="deleteLocConfirmMsg"></div>
-  
+
+                <div id="selectLocationToDeleteMsg">
+                  <p>Please select a location you would like to delete from the display menu</p>
+                </div>
+
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary close" data-dismiss="modal">Close</button>
-                <button type="button" id="deleteLocation" class="btn btn-primary">Delete</button>
+
                 <button type="button" id="deleteLocationConfirm" class="btn btn-primary">Confirm</button>
               </div>
             </div>

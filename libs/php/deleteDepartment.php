@@ -40,7 +40,7 @@
 
 	// first query
 
-	$query = 'SELECT * from personnel WHERE departmentID =' . $_REQUEST['id'];
+	$query = 'SELECT COUNT(id) AS idCount from personnel WHERE departmentID =' . $_REQUEST['id'];
 
 	$result = $conn->query($query);
 	
@@ -82,7 +82,7 @@
 
 		mysqli_close($conn);
 
-		echo json_encode($output); 
+		echo json_encode($personnel); 
 
 		exit;
 
@@ -96,11 +96,11 @@
 
 	}
 	
-	if(count($personnel) > 0){
+	if($personnel[0]['idCount'] > 0){
 		$output['data']['personnel'] = $personnel;
-		$output['data']['message'] = 'Location could not be deleted because it contains departments.';
+		$output['data']['message'] = 'Department could not be deleted because it contains departments.';
 	} else {
-	$output['data']['message'] = 'Location successfully deleted.';
+	$output['data']['message'] = 'Department successfully deleted.';
 		$query = "DELETE FROM department WHERE id = '$id'";
 	}
 

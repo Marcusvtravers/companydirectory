@@ -91,11 +91,34 @@ section{
   
 }
 
-
-.modal-body{
-    margin: 0px auto 0px auto;
-    width: 80%;
+.modal-tables{
+  
+    text-align: center;
 }
+
+.modal-tables tr td{
+    border: none;
+}
+.modal-tables select, .modal-tables input {
+    width: 75%;
+    
+}
+.modal-body{
+    width: 90%;
+    margin: 0 auto;
+    
+}
+
+.modal-body-small{
+    width: 80%;
+    margin: 0 auto;
+}
+.database-manipulation-modal{
+
+    width: 80%;
+    margin: 0 auto;
+}
+
 
 .departments-header-modal{
     display:flex;
@@ -135,17 +158,12 @@ section{
     width: 28%;
 }
 
-
-
-.modal-forms{
-    margin: 0 auto;
-
-    padding: 15px 0px
+#department-fill-modal{
+    display:none;
 }
-.modal-forms input,.modal-forms select{
-    width: 80%;
-    margin-bottom: 15px;
-}
+
+
+
 
 
 .table-container{
