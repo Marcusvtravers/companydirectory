@@ -103,7 +103,7 @@ function addUser(){
         dataType: 'JSON',
         type: 'POST',
         success:function(res){
-            console.log(res)
+       
             $('#department').empty();
             $('#addUserModal').modal('hide');
             let departmentAdd = document.getElementById('department');
@@ -142,7 +142,7 @@ function addUser(){
         
         let email = $('#email');
         let dep = departmentAdd.value;
-        console.log(dep)
+        
         $('#addUserModal').modal('hide');
     if (firstName.val() != '' && lastName.val() != '' && dep != '' && email.val() != ''){
     $.ajax({
@@ -160,8 +160,7 @@ function addUser(){
             $('.tableUsers').empty();
             let completetext = `${firstName.val()} ${lastName.val()} has been added to the database`;
             document.getElementById('addUserConfirmMessage').textContent = completetext;
-            console.log(res)
-            console.log("Success")
+          
             getUsers();
             document.getElementById('addUser').style.display = 'none';
             
@@ -194,7 +193,7 @@ function addDepartment(){
         dataType: 'JSON',
         type: 'POST',
         success:function(res){
-            console.log(res)
+           
             $('#addDepartmentLocationModal').empty();
             let locationNames = document.getElementById('addDepartmentLocationModal');
             for (let i = 0; i < res.data.length; i++){
@@ -230,8 +229,6 @@ function addDepartment(){
     })    
   
     $('#addDepartment').one('click', function(){
-        console.log(depName.value);
-         console.log(locName.val())
     
         $.ajax({
             url: 'libs/php/addDepartment.php',
@@ -243,7 +240,7 @@ function addDepartment(){
                 depLocation: locName.val()
             },
             success:function(res){
-                console.log(res)
+                
                 depName.value == '';
                 locName.value == ''; 
                 
@@ -286,7 +283,7 @@ function addLocation(){
         $('#addLocationModal').modal('hide');  
         $('#addLocationConfirmModal').modal('show'); 
         let locationName = document.getElementById('addLoca');
-       console.log(locationName.value)
+       
     
        let text = `Are you sure you would like to add the new location ${locationName.value}?`;
        document.getElementById('addLocationConfirmMessage').textContent = text;
@@ -313,7 +310,7 @@ function addLocation(){
                 document.getElementById('addLocation').style.display = 'none';
                 $("#location-fill").empty();
                 locationFill();
-                console.log(res)
+                
             },
             error:function(err){
                 console.log(err);
@@ -336,7 +333,7 @@ function deleteUser(id){
             id: id
         },
         success:function(res){
-            console.log(res)
+         
             let firstName = res.data.personnel[0].firstName
             let lastName = res.data.personnel[0].lastName
             let text = `Are you sure you want to delete ${firstName} ${lastName} from the database?`
@@ -398,7 +395,7 @@ function updateUser(id){
         },
         success:function(res){
             $('#departmentUpdateModal').empty();
-            console.log(res)
+          
             
            let departmentUpdateSelect = document.getElementById('departmentUpdateModal')
            for (let i = 0; i < res.data.department.length; i++){
@@ -411,7 +408,7 @@ function updateUser(id){
            }
        
     
-        console.log(departmentUpdateSelect.value)
+        
            let firstName = res.data.personnel[0].firstName
            let lastName = res.data.personnel[0].lastName
            let email = res.data.personnel[0].email
@@ -427,8 +424,7 @@ function updateUser(id){
             let lastNameVal = $('#lastNameUpdateModal')
             let depValue = departmentUpdateSelect.value
             let emailVal = $('#emailUpdateModal')
-            console.log(firstNameVal.val())
-            console.log(lastNameVal.val())
+ 
    
             $.ajax({
                 url: 'libs/php/updateUser.php',
@@ -441,7 +437,7 @@ function updateUser(id){
                     email: emailVal.val()
                 },
                 success:function(res){
-                    console.log(res)
+                   
                     const text = `The user ${firstNameVal.val()} ${lastNameVal.val()} was successfully updated.` 
                     document.getElementById('userUpdateDiv').style.display = 'none';
                     document.getElementById('successMsg').textContent = text;
@@ -475,7 +471,7 @@ $.ajax({
     dataType: 'JSON',
     type: 'POST',
     success:function(res){
-        console.log(res)
+       
         document.getElementById('department-first').style.display = 'block';
         document.getElementById('department-fill').style.display = 'none';
         document.getElementById('defaultSearch').style.display = 'block';
@@ -545,7 +541,7 @@ function locationFill(){
         dataType: 'JSON',
         type: 'POST',
         success:function(res){
-          console.log(res)
+         
             document.getElementById('defaultSearch').style.display = 'block';
             document.getElementById('orderBy').style.display = 'none';
 
@@ -564,7 +560,7 @@ function locationFill(){
 
             } 
             $('#location-fill').change(function(){
-                console.log($('#location-fill').val())
+                
               
                 document.getElementById('defaultSearch').style.display = 'none';
                 document.getElementById('orderBy').style.display = 'block';
@@ -604,7 +600,7 @@ function departmentForOrder(id){
             locationId: id
         },
         success:function(res){
-            console.log(res)
+           
             document.getElementById('department-first').style.display = 'none';
             document.getElementById('department-fill').style.display = 'block';
             let newVal = '<option value="">All</option>';
@@ -619,7 +615,7 @@ function departmentForOrder(id){
                 departmentSelect.appendChild(el);
             }
             $('#orderBy').on('click', function(){ 
-                console.log('start')
+                
 
                 $('#orderBy-modal').off('click');
                 searchDisplay(departmentSelect.value, id, orderBy.value, direction.value)
@@ -654,11 +650,7 @@ function departmentForOrder(id){
 
 
 function searchDisplay(departmentSelect, locationId, orderBySelect, directionValue){
-    console.log('search-display function')
-    console.log(departmentSelect)
-    console.log(locationId)
-    console.log(orderBySelect)
-    console.log(directionValue)
+
 
         $.ajax({
             url:'libs/php/orderBy.php',
@@ -671,7 +663,7 @@ function searchDisplay(departmentSelect, locationId, orderBySelect, directionVal
                 directionValue:directionValue
             },
             success:function(res){
-               console.log(res)
+              
              $('.tableUsers').empty();
              for (let i = 0; i < res.data.length; i++){
                 const department = res.data[i].department;
@@ -720,7 +712,7 @@ function searchDisplay(departmentSelect, locationId, orderBySelect, directionVal
 }
 
 function departmentFillForModal(){
-    console.log('department for modal opened');
+
     $.ajax({
         url: 'libs/php/departmentFill.php',
         dataType: 'JSON',
@@ -814,7 +806,7 @@ let searchBar = document.getElementById('searchBar');
 
 function searchBarDisplay(){
     let searchBarValue = document.getElementById('searchBar').value;
-    console.log(searchBarValue);
+    
     $.ajax({
         url: 'libs/php/searchBar.php',
         dataType: 'JSON',
@@ -823,7 +815,7 @@ function searchBarDisplay(){
             searchBarValue: searchBarValue
         },
         success:function(res){
-            console.log(res)
+            
             $('.tableUsers').empty();
              for (let i = 0; i < res.data.length; i++){
                 const department = res.data[i].department;
@@ -876,8 +868,7 @@ searchBar.addEventListener('keyup', searchBarDisplay);
 function getValueForEditDepartment(){
 let depFirst = document.getElementById('department-first');
 let depFill = document.getElementById('department-fill');
-console.log(depFirst.value);
-console.log(depFill.value);
+
 
 
 if (depFirst.value !== '' && depFill.value === ''){
@@ -896,8 +887,7 @@ if (depFirst.value !== '' && depFill.value === ''){
 function getValueForEditDepartmentModal(){
     let depFirst = document.getElementById('department-first-modal');
 let depFill = document.getElementById('department-fill-modal');
-console.log(depFirst.value);
-console.log(depFill.value);
+
 
 
 if (depFirst.value !== '' && depFill.value === ''){
@@ -917,21 +907,22 @@ function editDepartment(msg,value, depName){
     document.getElementById('editDepartmentConfirm').style.display = "block";
     document.getElementById('editDepSuccessMsg').style.display = 'none';
     document.getElementById('editDepartmentName').value = '';
-    console.log(msg)
-    console.log(depName)
+
     $('#editDepartmentModal').modal('show');
     $('#smallScreenOptionsModal').modal('hide');
    
     $('.close').on('click', function(){
         $('#editDepartmentModal').modal('hide');
         $('#editDepartmentConfirm').off('click');
+        
     })
     if (value === ''){
-        console.log(true)
+        
         document.getElementById('selectDepartmentToEditMsg').style.display = 'block';
+        document.getElementById('editDepartmentConfirm').style.display = 'none';
         document.getElementById('msgForEditingDepartment').style.display = 'none';
     } else{
-        console.log(false)
+        
         document.getElementById('selectDepartmentToEditMsg').style.display = 'none';
         document.getElementById('msgForEditingDepartment').style.display = 'block';
         document.getElementById('oldDepName').innerHTML = depName
@@ -972,8 +963,7 @@ function getValueForDeleteDepartment(){
 
     let depFirst = document.getElementById('department-first');
     let depFill = document.getElementById('department-fill');
-    console.log(depFirst.value);
-    console.log(depFill.value);
+ 
     
     
     if (depFirst.value !== '' && depFill.value === ''){
@@ -993,8 +983,7 @@ function getValueForDeleteDepartment(){
 function getValueForDeleteDepartmentModal(){
     let depFirst = document.getElementById('department-first-modal');
     let depFill = document.getElementById('department-fill-modal');
-    console.log(depFirst.value);
-    console.log(depFill.value);
+
     
     
     if (depFirst.value !== '' && depFill.value === ''){
@@ -1012,7 +1001,7 @@ function getValueForDeleteDepartmentModal(){
 }    
 
 function deleteDepartment(msg, value, depName){
-    console.log(msg, value, depName)
+
     $('#deleteDepartmentModal').modal('show');
     $('#smallScreenOptionsModal').modal('hide');
     $('.close').on('click', function(){
@@ -1039,7 +1028,7 @@ function deleteDepartment(msg, value, depName){
                     id: value
                 },
                 success:function(res){
-                    console.log(res)
+               
                     document.getElementById('deleteConfirmMsg').style.display = 'none';
                     document.getElementById('deleteDepartmentConfirm').style.display = 'none';
                     document.getElementById('deleteSuccessMsg').innerHTML = res.data.message;
@@ -1076,14 +1065,13 @@ function editLocation(){
     })
     $('#editLocationModal').modal('show');
 
-    console.log(locationSelect.value)
-    console.log(locationSelectModal.value)
+
     if (locationSelect.value == "" && locationSelectModal.value == ''){
         document.getElementById('edit-location-div').style.display = 'none';
         document.getElementById('selectLocationToEditMsg').style.display = 'block';
         document.getElementById('editLocationConfirm').style.display = 'none';
     } else if (locationSelect.value == '' && locationSelectModal.value != ''){
-        console.log('hello');
+     
         $('.close').on('click', function(){
             $('#editLocationModal').modal('hide');
             $('#editLocationConfirm').off('click');
@@ -1105,7 +1093,7 @@ function editLocation(){
                     id: locationSelectModal.value
                 },
                 success:function(res){
-                    console.log(res);
+                  
                     
                     document.getElementById('edit-location-div').style.display = 'none';
                 
@@ -1139,7 +1127,7 @@ function editLocation(){
                     id: locationSelect.value
                 },
                 success:function(res){
-                    console.log(res);
+              
                     
                     document.getElementById('edit-location-div').style.display = 'none';
                 
@@ -1194,7 +1182,7 @@ function deleteLocation(){
     } else if(deleteLocId.value == "" && deleteLocIdModal.value != ""){
         let textModal = $('#location-fill-modal>option:selected').text();
         let confirmMsgModal = `Are you sure you would like to delete ${textModal} from the directory?`
-        console.log(confirmMsgModal)
+     
         document.getElementById('deleteLocMsg').innerHTML = confirmMsgModal;
         deleteLocMsg.style.display = 'block';
         $('#deleteLocationConfirm').one('click', function(){
@@ -1207,7 +1195,7 @@ function deleteLocation(){
                     id: deleteLocIdModal.value
                 },
                 success:function(res){
-                    console.log(res);
+                    
                     let txt = res.data.message
                     document.getElementById('deleteLocMsg').style.display = 'none';
                     document.getElementById('deleteLocationConfirm').style.display = 'none';
@@ -1238,7 +1226,7 @@ function deleteLocation(){
                     id: deleteLocId.value
                 },
                 success:function(res){
-                    console.log(res);
+                   
                     let txt = res.data.message
                     document.getElementById('deleteLocMsg').style.display = 'none';
                     document.getElementById('deleteLocationConfirm').style.display = 'none';
