@@ -19,5 +19,5 @@ $cd_password = "A+.Yl#RTr)I*"; // password
 $cd_dbname = "companydirectoryprac"; // database name
 
 
-	//for live server info // user=marcusvint - pw = {Iammarcus92} // dbname = companydirectoryprac
+	//for live server info // user=marcusvint - pw = A+.Yl#RTr)I*  // dbname = companydirectoryprac
 ?>
