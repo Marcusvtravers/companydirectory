@@ -43,7 +43,7 @@ function getUsers(){
         dataType: 'JSON',
         type: 'POST',
         success: function(res){
-    
+         
             for (let i = 0; i < res.data.length; i++){
                 const department = res.data[i].department;
                 const email = res.data[i].email;
